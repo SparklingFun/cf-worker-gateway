@@ -15,6 +15,9 @@
   ],
   "author": "SparklingFun",
   "license": "MIT",
+  "repository": {
+    "url": "https://github.com/SparklingFun/cf-worker-gateway"
+  },
   "dependencies": {
     "glob-to-regexp": "^0.4.1"
   },
