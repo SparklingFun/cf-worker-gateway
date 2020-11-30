@@ -17,5 +17,5 @@ interface FetchEvent extends Event {
     request: Request;
     respondWith(response: Promise<Response> | Response): Promise<Response>;
 }
-export default function gateway(event: FetchEvent, options: GatewayOption): Event | undefined;
+export default function gateway(event: FetchEvent, options: GatewayOption): Event | Response;
 export {};

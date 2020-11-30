@@ -89,8 +89,7 @@ export default function gateway(event: FetchEvent, options: GatewayOption) {
     // if no rewrite rule matched, check redirect.
     let _redirectResp = _redirectRequest(event, options);
     if(_redirectResp && _redirectResp instanceof Response) {
-        event.respondWith(_redirectResp);
-        return;
+        return _redirectResp;
     }
     // all rules passed, return origin event
     return event;
