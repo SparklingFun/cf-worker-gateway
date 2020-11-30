@@ -18,12 +18,17 @@ interface GatewayOption {
     redirects?: Array<GatewayRedirect>
 }
 
+interface FetchEvent extends Event {
+	request: Request;
+	respondWith(response: Promise<Response>|Response): Promise<Response>;
+}
+
 function _modifyEvent(event: FetchEvent, modifiedReq: Object) {
     let _req = event.request.clone();
     let newReq = Object.assign({}, _req, modifiedReq)
-    let _evt = new FetchEvent("fetch", {
-        request: newReq
-    });
+    let _evt = new Event("fetch");
+    // @ts-ignore
+    _evt.request = newReq;
     return _evt;
 }
 
