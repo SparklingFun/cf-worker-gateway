@@ -1,13 +1,14 @@
 # cf-worker-gateway
 
-Status: ![Publish](https://github.com/SparklingFun/cf-worker-gateway/workflows/Publish/badge.svg)
+Status: ![Publish & Test](https://github.com/SparklingFun/cf-worker-gateway/workflows/Publish/badge.svg)
 
 ## Getting Start
 
-```
+```bash
 npm install cf-worker-gateway --save
 
-# or yarn add cf-worker-gateway
+# or 
+# yarn add cf-worker-gateway
 ```
 
 ## Usage
@@ -25,7 +26,7 @@ import gateway from "cf-worker-gateway";
 addEventListener("fetch", event => {
   const gateWayResult = gateway(event, {
     redirects: [
-      // Your rules here.
+      // {source: "/path-a", destination: "/path-b"}
     ],
     rewrites: []
   })
@@ -35,3 +36,28 @@ addEventListener("fetch", event => {
 ```
 
 ## Docs
+
+> Glob pattern supported by `glob-to-regexp`, check it's [docs](https://github.com/fitzgen/glob-to-regexp#readme) for pattern rules.
+
+### `rewrites`
+
+> `rewrite` rules have an higher priority than `redirects`.
+
+There're three properties in one rule,
+
+| Prop          | Type                                 | Allow Empty |
+|---------------|--------------------------------------|:-----------:|
+| `source`      | String (glob pattern)                |             |
+| `destination` | String (Your router support pattern) |             |
+| `basePath`    | String                               |      √      |
+
+### `redirects`
+
+There're 4 properties in one rule, similar to `rewrites`,
+
+| Prop          | Type                                 | Allow Empty |
+|---------------|--------------------------------------|:-----------:|
+| `source`      | String (glob pattern)                |             |
+| `destination` | String (Your router support pattern) |             |
+| `basePath`    | String                               |      √      |
+| `permant`     | Boolean                              |  √ (default `false`)  |
