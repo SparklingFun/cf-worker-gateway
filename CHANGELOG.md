@@ -1,3 +1,12 @@
+## [0.1.1](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.1-alpha.0...v0.1.1) (2020-12-01)
+
+
+### Features
+
+* add jest ci test & rich docs ([3315626](https://github.com/SparklingFun/cf-worker-gateway/commit/33156260eeac033dd1e9a1784f3efd2e086925c1))
+
+
+
 ## [0.1.1-alpha.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.0-alpha.0...v0.1.1-alpha.0) (2020-12-01)
 
 
