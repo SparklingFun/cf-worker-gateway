@@ -1,12 +1,3 @@
-# [0.2.0-beta.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.0-alpha.0...v0.2.0-beta.0) (2020-12-01)
-
-
-### Bug Fixes
-
-* adjust to test env by using `this` ugly ([242940f](https://github.com/SparklingFun/cf-worker-gateway/commit/242940fc36b9bfd9bfd79e73bb81fb668a85ac42))
-
-
-
 # [0.1.0-alpha.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.0.4...v0.1.0-alpha.0) (2020-12-01)
 
 
