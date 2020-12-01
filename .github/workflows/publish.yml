@@ -1,16 +1,16 @@
 on:
   push:
     tags:
-    - 'v*'  # 这段的意思是仅在出现名为 v 字符开头的tag时，触发此任务，如v1.2.1
+    - 'v*'
 name: Publish
 jobs:
-  # test: # test任务可选，视情况决定是否添加
+  # test:
   #   runs-on: ubuntu-latest
   #   steps:
   #   - uses: actions/checkout@v2
   #   - uses: actions/setup-node@v1
   #     with:
-  #       node-version: 10
+  #       node-version: 12
   #   - run: npm i
   #   - run: npm test
 
@@ -28,3 +28,17 @@ jobs:
     - run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+  
+  github-release:
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12
+        registry-url: https://registry.npmjs.org/
+    - run: npm i -g github-release-from-changelog
+    - run: github-release-from-changelog
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
