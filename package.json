@@ -4,7 +4,7 @@
   "description": "A simple gateway for Cloudflare Worker, use before `respondWith`.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node test/index.js",
     "build": "tsc --declaration",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
     "postversion": "git push --follow-tags"
@@ -22,8 +22,10 @@
     "glob-to-regexp": "^0.4.1"
   },
   "devDependencies": {
+    "@cloudflare/kv-asset-handler": "^0.0.12",
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
+    "@dollarshaveclub/cloudworker": "^0.1.2",
     "@types/glob-to-regexp": "^0.4.0",
     "conventional-changelog-cli": "^2.1.1",
     "husky": "^4.3.0",

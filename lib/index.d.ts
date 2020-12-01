@@ -13,9 +13,13 @@ interface GatewayOption {
     rewrites?: Array<GatewayRewrite>;
     redirects?: Array<GatewayRedirect>;
 }
+interface GatewayHelpers {
+    Request?: Request;
+    Response?: Response;
+}
 interface FetchEvent extends Event {
     request: Request;
     respondWith(response: Promise<Response> | Response): Promise<Response>;
 }
-export default function gateway(event: FetchEvent, options: GatewayOption): Event | Response;
+export default function gateway(event: FetchEvent, options: GatewayOption, helpers?: GatewayHelpers): any;
 export {};
