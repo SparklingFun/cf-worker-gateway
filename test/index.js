@@ -3,10 +3,8 @@ const gateway = require("../lib/index").default;
 
 const simpleScript = `
 addEventListener('fetch', event => {
-  let _newEvt = gateway(event, {
+  let _newEvt = gateway.call(this, event, {
     redirects: [{source: '/test2', destination: '/test-slug'}]
-  }, {
-    Response
   });
   event.respondWith(_newEvt instanceof Response ? _newEvt : new Response('hello', {status: 200}));
 })

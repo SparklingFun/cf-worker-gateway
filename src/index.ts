@@ -5,70 +5,21 @@ interface GatewayRewrite {
     destination: string;
     basePath?: boolean;
 }
-
 interface GatewayRedirect {
     source: string;
     destination: string;
     permanent?: boolean;
     basePath?: boolean;
 }
-
 interface GatewayOption {
     rewrites?: Array<GatewayRewrite>,
     redirects?: Array<GatewayRedirect>
-}
-interface GatewayHelpers {
-    Request?: Request;
-    Response?: Response;
 }
 // some useful interface from [Gist](https://gist.github.com/ithinkihaveacat/227bfe8aa81328c5d64ec48f4e4df8e5)
 interface FetchEvent extends Event {
 	request: Request;
 	respondWith(response: Promise<Response>|Response): Promise<Response>;
 }
-// interface Request extends Body {
-// 	new(url: string, init?: {
-//     method?: string,
-//     url?: string,
-//     referrer?: string,
-//     mode?: 'cors'|'no-cors'|'same-origin'|'navigate',
-//     credentials?: 'omit'|'same-origin'|'include',
-//     redirect?: 'follow'|'error'|'manual',
-//     integrity?: string,
-//     cache?: 'default'|'no-store'|'reload'|'no-cache'|'force-cache'
-//     headers?: Headers
-// 	}): Request;
-// 	cache: RequestCache;
-// 	credentials: RequestCredentials;
-// 	headers: Headers;
-// 	integrity: string;
-// 	method: string;
-// 	mode: RequestMode;
-// 	referrer: string;
-// 	referrerPolicy: ReferrerPolicy;
-// 	redirect: RequestRedirect;
-// 	url: string;
-// 	clone(): Request;
-// }
-// interface Response extends Body {
-// 	new(url: string): Response;
-// 	new(body: Blob|BufferSource|FormData|String, init: {
-// 		status?: number,
-// 		statusText?: string,
-// 		headers?: (Headers|{ [k: string]: string })
-// 	}): Response;
-// 	headers: Headers;
-// 	ok: boolean;
-// 	redirected: boolean;
-// 	status: number;
-// 	statusText: string;
-// 	type: ResponseType;
-// 	url: string;
-// 	useFinalURL: boolean;
-// 	clone(): Response;
-// 	error(): Response;
-// 	redirect(): Response;
-// }
 
 function _modifyEvent(event: FetchEvent, modifiedReq: Object) {
     let _req = event.request.clone();
@@ -111,15 +62,7 @@ function _rewriteRequest(event: FetchEvent, options: GatewayOption) {
     return;
 }
 
-function _redirectRequest(event: FetchEvent, options: GatewayOption, helpers?: GatewayHelpers) {
-    let Response;
-    if(!Response) {
-        if(helpers && helpers.Response) {
-            Response = helpers.Response;
-        } else {
-            throw new Error("[Gateway Error] Runtime miss `Response`, Helpers are not available!")
-        }
-    }
+function _redirectRequest (event: FetchEvent, options: GatewayOption) {
     // rules check
     if(!options.redirects) return;
     if(!Array.isArray(options.redirects)) {
@@ -132,30 +75,24 @@ function _redirectRequest(event: FetchEvent, options: GatewayOption, helpers?: G
     if(matched) {
         let origin = new URL(event.request.url).origin;
         // @ts-ignore
-        return Response.redirect(origin + matched.destination, matched.permanent ? 308 : 307);
+        return this ? this.Response.redirect(origin + matched.destination, matched.permanent ? 308 : 307) : Response.redirect(origin + matched.destination, matched.permanent ? 308 : 307);
     }
     // no rewrite rule matched
     return;
 }
 
-export default function gateway(event: FetchEvent, options: GatewayOption, helpers?: GatewayHelpers) {
-    let Response;
-    if(!Response) {
-        console.log("[Gateway Warning] Runtime miss `Response`, trying to use `helper.Response`...")
-        if(helpers && helpers.Response) {
-            Response = helpers.Response;
-        } else {
-            throw new Error("[Gateway Error] Runtime miss `Response`, Helpers are not available!")
-        }
-    }
+function gateway (event: FetchEvent, options: GatewayOption) {
     // rewrite always has a higher priority.
     let _evt = _rewriteRequest(event, options);
     if(_evt) return _evt;
     // if no rewrite rule matched, check redirect.
-    let _redirectResp = _redirectRequest(event, options, helpers);
+    // @ts-ignore
+    let _redirectResp = _redirectRequest.call(this, event, options);
     if(_redirectResp) {
         return _redirectResp;
     }
     // all rules passed, return origin event
     return event;
 }
+
+export default gateway;
