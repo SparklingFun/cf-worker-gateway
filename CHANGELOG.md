@@ -1,3 +1,12 @@
+## [0.1.2](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.1...v0.1.2) (2020-12-02)
+
+
+### Features
+
+* support basePath config ([8bc3ecd](https://github.com/SparklingFun/cf-worker-gateway/commit/8bc3ecdaaf895859eddf74f2086436b1af588bd6))
+
+
+
 ## [0.1.1](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.1-alpha.0...v0.1.1) (2020-12-01)
 
 
