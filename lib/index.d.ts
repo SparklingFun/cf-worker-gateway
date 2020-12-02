@@ -11,6 +11,7 @@ interface GatewayOption {
     rewrites?: Array<GatewayRewrite>;
     redirects?: Array<GatewayRedirect>;
     basePath?: String;
+    allowOptionRequest?: Boolean;
 }
 interface FetchEvent extends Event {
     request: Request;

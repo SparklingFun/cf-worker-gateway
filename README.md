@@ -78,3 +78,4 @@ There're 3 properties in one rule, similar to `rewrites`,
 | `source`      | String (glob pattern)                |             |
 | `destination` | String (Your router support pattern) |             |
 | `permant`     | Boolean                              |  √ (default `false`)  |
+| `crossOrigin` | Boolean                              |  √ (default `false`)  |
