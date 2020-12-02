@@ -1,3 +1,12 @@
+## [0.1.3](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.2...v0.1.3) (2020-12-02)
+
+
+### Features
+
+* modified event will bring original event in `modifiedEvent.$$origin` ([d89cfdd](https://github.com/SparklingFun/cf-worker-gateway/commit/d89cfdd7c33bfffb4a28bbfc2c832ffda30e61c8))
+
+
+
 ## [0.1.2](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.1...v0.1.2) (2020-12-02)
 
 
