@@ -1,6 +1,6 @@
 # cf-worker-gateway
 
-Status: ![Publish & Test](https://github.com/SparklingFun/cf-worker-gateway/workflows/Publish/badge.svg)
+Status: ![Test](https://github.com/SparklingFun/cf-worker-gateway/workflows/Test/badge.svg)
 
 ## Getting Start
 
