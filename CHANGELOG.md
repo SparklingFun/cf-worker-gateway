@@ -1,3 +1,12 @@
+## [0.1.4](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.3...v0.1.4) (2020-12-02)
+
+
+### Features
+
+* add cors & options bypass ([d159c76](https://github.com/SparklingFun/cf-worker-gateway/commit/d159c76fb6787669d7d304d5771715963df50eaa))
+
+
+
 ## [0.1.3](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.2...v0.1.3) (2020-12-02)
 
 

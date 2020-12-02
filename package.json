@@ -1,6 +1,6 @@
 {
   "name": "cf-worker-gateway",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A simple gateway for Cloudflare Worker, use before `respondWith`.",
   "main": "lib/index.js",
   "scripts": {
