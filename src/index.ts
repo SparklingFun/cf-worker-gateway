@@ -3,17 +3,16 @@ import globToRegExp from "glob-to-regexp";
 interface GatewayRewrite {
     source: string;
     destination: string;
-    basePath?: boolean;
 }
 interface GatewayRedirect {
     source: string;
     destination: string;
     permanent?: boolean;
-    basePath?: boolean;
 }
 interface GatewayOption {
-    rewrites?: Array<GatewayRewrite>,
-    redirects?: Array<GatewayRedirect>
+    rewrites?: Array<GatewayRewrite>;
+    redirects?: Array<GatewayRedirect>;
+    basePath?: String;
 }
 // some useful interface from [Gist](https://gist.github.com/ithinkihaveacat/227bfe8aa81328c5d64ec48f4e4df8e5)
 interface FetchEvent extends Event {
@@ -51,10 +50,16 @@ function _rewriteRequest(event: FetchEvent, options: GatewayOption) {
     }
     if(!options.rewrites.length) return;
     // check complete, start rewrite
-    let matched = options.rewrites.find(rule => _matchPath(event.request.url, rule.source));
+    let matched = options.rewrites.find(rule => {
+        // fill source url if `basePath`
+        const source = (options.basePath || "") + rule.source
+        return _matchPath(event.request.url, source)
+    });
     if(matched) {
+        // wrong config
+        if(!matched.destination) return;
         let newEvt = _modifyEvent(event, {
-            url: new URL(event.request.url).origin + matched.destination
+            url: new URL(event.request.url).origin + (options.basePath || "") +  matched.destination
         })
         return newEvt;
     }
@@ -71,11 +76,17 @@ function _redirectRequest (event: FetchEvent, options: GatewayOption) {
     }
     if(!options.redirects.length) return;
     // check complete, start rewrite
-    let matched = options.redirects.find(rule => _matchPath(event.request.url, rule.source));
+    let matched = options.redirects.find(rule => {
+        // fill source url if `basePath`
+        const source = (options.basePath || "") + rule.source
+        return _matchPath(event.request.url, source)
+    });
     if(matched) {
+        // wrong config
+        if(!matched.destination) return;
         let origin = new URL(event.request.url).origin;
         // @ts-ignore
-        return this ? this.Response.redirect(origin + matched.destination, matched.permanent ? 308 : 307) : Response.redirect(origin + matched.destination, matched.permanent ? 308 : 307);
+        return this ? this.Response.redirect(origin + (options.basePath || "") + matched.destination, matched.permanent ? 308 : 307) : Response.redirect(origin + (options.basePath || "") + matched.destination, matched.permanent ? 308 : 307);
     }
     // no rewrite rule matched
     return;

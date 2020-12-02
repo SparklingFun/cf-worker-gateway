@@ -4,14 +4,19 @@ Status: ![Publish & Test](https://github.com/SparklingFun/cf-worker-gateway/work
 
 ## Getting Start
 
+Install via npm:
+
 ```bash
 npm install cf-worker-gateway --save
-
-# or 
-# yarn add cf-worker-gateway
 ```
 
-## Usage
+Or via yarn:
+
+```bash
+yarn add cf-worker-gateway
+```
+
+## Package Usage
 
 Redirect or rewrite your request, behave like a Gateway.
 
@@ -39,9 +44,22 @@ addEventListener("fetch", event => {
 
 > Glob pattern supported by `glob-to-regexp`, check it's [docs](https://github.com/fitzgen/glob-to-regexp#readme) for pattern rules.
 
-### `rewrites`
+### `gateway(event: FetchEvent, options: GatewayOptions): FetchEvent | Response`
 
-> `rewrite` rules have an higher priority than `redirects`.
+`gateway` is the default export function, you need to pass origin event, if `redirects` rules matched it will return a redirected response. Otherwise, it will return a modified (or origin event if no rule was matched) event.
+
+> In order to fit a test environment ([@dollarshaveclub/cloudworker](https://github.com/dollarshaveclub/cloudworker#readme)). So there is a solution to fit vm enviroment in node.js, by calling gateway like this,
+> ```javascript
+> gateway.call(this, event, options); // this or context should contains `Response` at least.
+> ```
+
+### GatewayOptions - `basePath`
+
+if `basePath` is delivered, all rules (both `rewrites` and `redirects`) will be prefixed by using `basePath`
+
+### GatewayOptions - `rewrites`
+
+> `rewrite` rules have a higher priority than `redirects`.
 
 There're three properties in one rule,
 
@@ -49,9 +67,8 @@ There're three properties in one rule,
 |---------------|--------------------------------------|:-----------:|
 | `source`      | String (glob pattern)                |             |
 | `destination` | String (Your router support pattern) |             |
-| `basePath`    | String                               |      √      |
 
-### `redirects`
+### GatewayOptions - `redirects`
 
 There're 4 properties in one rule, similar to `rewrites`,
 
@@ -59,5 +76,4 @@ There're 4 properties in one rule, similar to `rewrites`,
 |---------------|--------------------------------------|:-----------:|
 | `source`      | String (glob pattern)                |             |
 | `destination` | String (Your router support pattern) |             |
-| `basePath`    | String                               |      √      |
 | `permant`     | Boolean                              |  √ (default `false`)  |
