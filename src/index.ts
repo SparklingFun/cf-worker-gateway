@@ -91,7 +91,7 @@ function _redirectRequest (event: FetchEvent, options: GatewayOption) {
     return;
 }
 
-function gateway (event: FetchEvent, options: GatewayOption) {
+function gateway (event: FetchEvent, options: GatewayOption): Response | Event {
     // rewrite always has a higher priority
     let _evt = _rewriteRequest(event, options);
     if(_evt) return _evt;
