@@ -22,7 +22,7 @@ interface FetchEvent extends Event {
 
 function _modifyEvent(event: FetchEvent, modifiedReq: Object) {
     let _req = event.request.clone();
-    let newReq = Object.assign({}, _req, modifiedReq)
+    let newReq = Object.assign({}, _req, modifiedReq);
     let _evt = new Event("fetch");
     // @ts-ignore
     _evt.request = newReq;
@@ -52,8 +52,8 @@ function _rewriteRequest(event: FetchEvent, options: GatewayOption) {
     // check complete, start rewrite
     let matched = options.rewrites.find(rule => {
         // fill source url if `basePath`
-        const source = (options.basePath || "") + rule.source
-        return _matchPath(event.request.url, source)
+        const source = (options.basePath || "") + rule.source;
+        return _matchPath(event.request.url, source);
     });
     if(matched) {
         // wrong config
@@ -78,11 +78,10 @@ function _redirectRequest (event: FetchEvent, options: GatewayOption) {
     // check complete, start rewrite
     let matched = options.redirects.find(rule => {
         // fill source url if `basePath`
-        const source = (options.basePath || "") + rule.source
-        return _matchPath(event.request.url, source)
+        const source = (options.basePath || "") + rule.source;
+        return _matchPath(event.request.url, source);
     });
     if(matched) {
-        // wrong config
         if(!matched.destination) return;
         let origin = new URL(event.request.url).origin;
         // @ts-ignore
@@ -93,10 +92,10 @@ function _redirectRequest (event: FetchEvent, options: GatewayOption) {
 }
 
 function gateway (event: FetchEvent, options: GatewayOption) {
-    // rewrite always has a higher priority.
+    // rewrite always has a higher priority
     let _evt = _rewriteRequest(event, options);
     if(_evt) return _evt;
-    // if no rewrite rule matched, check redirect.
+    // if no rewrite rule matched, check redirect
     // @ts-ignore
     let _redirectResp = _redirectRequest.call(this, event, options);
     if(_redirectResp) {

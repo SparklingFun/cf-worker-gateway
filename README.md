@@ -27,7 +27,6 @@ Configuration is designed referring to Next.js ["Redirect & Rewrite" RFC](https:
 ```javascript
 import gateway from "cf-worker-gateway";
 
-// some logic code
 addEventListener("fetch", event => {
   const gateWayResult = gateway(event, {
     redirects: [
@@ -35,7 +34,7 @@ addEventListener("fetch", event => {
     ],
     rewrites: []
   })
-  // There are two conditions, redirected response or modified event.
+  // modified event usually, but it will be response if matched a redirect rule.
   event.respondWith(gateWayResult instanceof Response ? gateWayResult : handleRequest(gateWayResult.request));
 })
 ```
@@ -48,7 +47,7 @@ addEventListener("fetch", event => {
 
 `gateway` is the default export function, you need to pass origin event, if `redirects` rules matched it will return a redirected response. Otherwise, it will return a modified (or origin event if no rule was matched) event.
 
-> In order to fit a test environment ([@dollarshaveclub/cloudworker](https://github.com/dollarshaveclub/cloudworker#readme)). So there is a solution to fit vm enviroment in node.js, by calling gateway like this,
+> In order to fit a test environment ([@dollarshaveclub/cloudworker](https://github.com/dollarshaveclub/cloudworker#readme)), there is a solution to fit vm enviroment in node.js, by calling gateway like this,
 > ```javascript
 > gateway.call(this, event, options); // this or context should contains `Response` at least.
 > ```
@@ -61,7 +60,7 @@ if `basePath` is delivered, all rules (both `rewrites` and `redirects`) will be 
 
 > `rewrite` rules have a higher priority than `redirects`.
 
-There're three properties in one rule,
+There're 2 properties in one rule,
 
 | Prop          | Type                                 | Allow Empty |
 |---------------|--------------------------------------|:-----------:|
@@ -70,7 +69,7 @@ There're three properties in one rule,
 
 ### GatewayOptions - `redirects`
 
-There're 4 properties in one rule, similar to `rewrites`,
+There're 3 properties in one rule, similar to `rewrites`,
 
 | Prop          | Type                                 | Allow Empty |
 |---------------|--------------------------------------|:-----------:|
