@@ -43,7 +43,7 @@ addEventListener("fetch", event => {
 
 > Glob pattern supported by `glob-to-regexp`, check it's [docs](https://github.com/fitzgen/glob-to-regexp#readme) for pattern rules.
 
-### `gateway(event: FetchEvent, options: GatewayOptions): FetchEvent | Response`
+### `gateway(event: FetchEvent, options: GatewayOptions): ModifiedFetchEvent | FetchEvent | Response`
 
 `gateway` is the default export function, you need to pass origin event, if `redirects` rules matched it will return a redirected response. Otherwise, it will return a modified (or origin event if no rule was matched) event.
 
@@ -66,6 +66,8 @@ There're 2 properties in one rule,
 |---------------|--------------------------------------|:-----------:|
 | `source`      | String (glob pattern)                |             |
 | `destination` | String (Your router support pattern) |             |
+
+Attention, `rewrites` will overwrite the origin request url, so if you want to visit the origin event, you can access `event.$$origin` in modified events (since v0.1.3).
 
 ### GatewayOptions - `redirects`
 
