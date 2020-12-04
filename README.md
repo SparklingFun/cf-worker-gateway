@@ -45,7 +45,7 @@ addEventListener("fetch", event => {
 
 ### `gateway(event: FetchEvent, options: GatewayOptions): ModifiedFetchEvent | FetchEvent | Response`
 
-`gateway` is the default export function, you need to pass origin event, if `redirects` rules matched it will return a redirected response. Otherwise, it will return a modified (or origin event if no rule was matched) event.
+`gateway` is the default export function, you need to pass the origin event, if `redirects` rules matched, it will return a redirected response. Otherwise, it will return a modified (or the origin event if no rule was matched) event.
 
 > In order to fit a test environment ([@dollarshaveclub/cloudworker](https://github.com/dollarshaveclub/cloudworker#readme)), there is a solution to fit vm enviroment in node.js, by calling gateway like this,
 > ```javascript
@@ -55,6 +55,12 @@ addEventListener("fetch", event => {
 ### GatewayOptions - `basePath`
 
 if `basePath` is delivered, all rules (both `rewrites` and `redirects`) will be prefixed by using `basePath`
+
+### GatewayOptions - `allowOptionRequest`
+
+As a gateway, you can make CORS much more simple, just enable `allowOptionRequest`, set it `true`, and all `OPTIONS` request will have a `204` response.
+
+> If you need `Access-Control-Allow-Headers`, you need to pay attention in ACTUAL response, such as a JSON `POST` response.
 
 ### GatewayOptions - `rewrites`
 
