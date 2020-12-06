@@ -1,6 +1,6 @@
 # cf-worker-gateway
 
-![Test](https://github.com/SparklingFun/cf-worker-gateway/workflows/Test/badge.svg)
+![Workflow](https://github.com/SparklingFun/cf-worker-gateway/workflows/Publish/badge.svg)
 
 __:warning: Attention: Current version is in canary, PLEASE always use the latest version!__
 
