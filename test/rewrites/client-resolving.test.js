@@ -14,7 +14,6 @@ const testRule = {
 
 test('Client resoving rewrites', () => {
     return tester(testRule).then(res => {
-        console.log(res.url)
         expect(res.status).toBe(200);
     })
 });
