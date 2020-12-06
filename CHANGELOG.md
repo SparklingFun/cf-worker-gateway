@@ -1,3 +1,12 @@
+## [0.1.5-alpha.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.4...v0.1.5-alpha.0) (2020-12-06)
+
+
+### Features
+
+* add robotsHandler & add formal test way ([2179185](https://github.com/SparklingFun/cf-worker-gateway/commit/2179185397774ec05fcf6063824f35a5416f6a63))
+
+
+
 ## [0.1.4](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.3...v0.1.4) (2020-12-02)
 
 
