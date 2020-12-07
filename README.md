@@ -83,6 +83,8 @@ There're 3 properties in one rule, similar to `rewrites`,
 | `permant`     | Boolean                              |  √ (default `false`)  |
 | `crossOrigin` | Boolean                              |  √ (default `false`)  |
 
+> If `crossOrigin` was set, the global `basePath` will be ignored.
+
 ## Helpers
 
 ### `robotsHandler(event: FetchEvent, options: RobotConfig): Response | undefined`
@@ -97,7 +99,7 @@ addEventListener("fetch", event => {
     rules: [
       {
         userAgent: "*",
-        disallow: ["/"] // or you can set allow, but allow & disallow are not compatible, allows comes first.
+        disallow: ["/"] // or you can set allow, but allow & disallow are not compatible, allow comes first.
       }
     ],
     sitemapUrl: [""]

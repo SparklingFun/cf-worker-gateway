@@ -17,9 +17,20 @@ export default function _redirectRequest(event: FetchEvent, options: GatewayOpti
     });
     if (matched) {
         if (!matched.destination) return;
-        let origin = matched.crossOrigin ? '' : new URL(event.request.url).origin;
+        let origin = new URL(event.request.url).origin;
+        let isCrossOrigin = false
+        try {
+            new URL(matched.destination);
+            isCrossOrigin = true
+        } catch(e) {
+            // console.log(e.message)
+        }
+        if(!matched.crossOrigin && isCrossOrigin) {
+            console.log('Cross Origin redirect should be configured as `crossOrigin`')
+            return;
+        }
         // @ts-ignore
-        return Response.redirect(origin + (options.basePath || "") + matched.destination, matched.permanent ? 308 : 307);
+        return Response.redirect(matched.crossOrigin ? matched.destination : origin + (options.basePath || "") + matched.destination, matched.permanent ? 308 : 307);
     }
     // no rewrite rule matched
     return;
