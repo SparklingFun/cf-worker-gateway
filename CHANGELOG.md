@@ -1,3 +1,18 @@
+## [0.1.5](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.5-alpha.0...v0.1.5) (2020-12-07)
+
+
+### Bug Fixes
+
+* ci should be in sequence which cannot be controlled by multi workflows ([998e641](https://github.com/SparklingFun/cf-worker-gateway/commit/998e64103911079cf793338df57b270abf5cf54f))
+
+
+### Features
+
+* add seperate ci test ([e8bf4ff](https://github.com/SparklingFun/cf-worker-gateway/commit/e8bf4ff7ed89a3b270834e8704f1f859c1816ee1))
+* ci add cache for node_modules ([0d1194f](https://github.com/SparklingFun/cf-worker-gateway/commit/0d1194f0905941987ba54677a74b95b403766707))
+
+
+
 ## [0.1.5-alpha.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.4...v0.1.5-alpha.0) (2020-12-06)
 
 
