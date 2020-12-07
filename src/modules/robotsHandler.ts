@@ -40,7 +40,6 @@ ${sitemap}`).trim(), {
         
         return new Response((`
 ${rules}
-
 ${sitemap}
         `).trim(), {
             status: 200

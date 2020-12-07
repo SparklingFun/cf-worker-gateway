@@ -97,7 +97,7 @@ addEventListener("fetch", event => {
     rules: [
       {
         userAgent: "*",
-        disallow: ["/"] // or you can set allow, but allow & disallow are not compatible.
+        disallow: ["/"] // or you can set allow, but allow & disallow are not compatible, allows comes first.
       }
     ],
     sitemapUrl: [""]
