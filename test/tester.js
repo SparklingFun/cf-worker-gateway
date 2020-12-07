@@ -8,12 +8,15 @@ function gatewayTester(rules, testPath = '/test2') {
 
 addEventListener('fetch', event => {
   let _newEvt = gateway(event, ${JSON.stringify(rules)});
-  console.log(_newEvt.request.destination)
   event.respondWith(_newEvt instanceof Response ? _newEvt : new Response(_newEvt.request.url, {status: 200}));
 })
 `
   const req = new Cloudworker.Request('http://127.0.0.1' + testPath);
-  const cw = new Cloudworker(simpleScript)
+  const cw = new Cloudworker(simpleScript, {
+    bindings: {
+      Event
+    }
+  })
   return cw.dispatch(req)
 }
 
