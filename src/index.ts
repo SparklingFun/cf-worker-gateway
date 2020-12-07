@@ -9,7 +9,7 @@ function gateway(event: CustomFetchEvent, options: GatewayOption): Response | Cu
             // @ts-ignore
             let headerObj = Object.fromEntries(event.request.headers);
             return new Response('', {
-                status: 200,
+                status: 204,
                 headers: new Headers({
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Headers': headerObj['access-control-request-headers'] || ''
