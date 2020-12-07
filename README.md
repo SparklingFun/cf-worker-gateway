@@ -27,7 +27,7 @@ Configuration is designed referring to Next.js ["Redirect & Rewrite" RFC](https:
 ## Example
 
 ```javascript
-import gateway from "cf-worker-gateway";
+import { gateway } from "cf-worker-gateway";
 
 addEventListener("fetch", event => {
   const gateWayResult = gateway(event, {
@@ -82,3 +82,27 @@ There're 3 properties in one rule, similar to `rewrites`,
 | `destination` | String (Your router support pattern) |             |
 | `permant`     | Boolean                              |  √ (default `false`)  |
 | `crossOrigin` | Boolean                              |  √ (default `false`)  |
+
+## Helpers
+
+### `robotsHandler(event: FetchEvent, options: RobotConfig): Response | undefined`
+
+Useful function that handle robots.txt requests, configuration is so simple.
+
+```javascript
+import { robotsHandler } from "cf-worker-gateway";
+
+addEventListener("fetch", event => {
+  const robotRes = robotsHandler(event, {
+    rules: [
+      {
+        userAgent: "*",
+        disallow: ["/"] // or you can set allow, but allow & disallow are not compatible.
+      }
+    ],
+    sitemapUrl: [""]
+  });
+  event.respondWith(robotRes || new Response("Test", {status: 200}));
+  // it will response a robots.txt when request url is like `some-url.path.com/robots.txt`
+})
+```

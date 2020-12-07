@@ -1,5 +1,4 @@
 const fs = require('fs');
-const process = require('process')
 const Cloudworker = require("@dollarshaveclub/cloudworker");
 const code = fs.readFileSync(process.cwd() + "/dist/index.js");
 
