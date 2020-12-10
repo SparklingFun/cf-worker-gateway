@@ -1,3 +1,12 @@
+## [0.1.7-canary.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.6...v0.1.7-canary.0) (2020-12-10)
+
+
+### Features
+
+* support base64 favicon ([44be3f9](https://github.com/SparklingFun/cf-worker-gateway/commit/44be3f96d66578350460bf0ad32e55f15adddccd))
+
+
+
 ## [0.1.6](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.5...v0.1.6) (2020-12-10)
 
 
