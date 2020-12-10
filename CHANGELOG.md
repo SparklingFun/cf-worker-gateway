@@ -1,3 +1,12 @@
+## [0.1.6](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.5...v0.1.6) (2020-12-10)
+
+
+### Bug Fixes
+
+* **helpers:** `robotsHandler` should both return when allow & disallow are set ([7673a01](https://github.com/SparklingFun/cf-worker-gateway/commit/7673a0141c737f7567a9ba0c5b61983b13aaecc5))
+
+
+
 ## [0.1.5](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.5-alpha.0...v0.1.5) (2020-12-07)
 
 
