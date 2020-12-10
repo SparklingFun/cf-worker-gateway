@@ -19,9 +19,10 @@ export interface GatewayRedirect {
 export interface GatewayOption {
     rewrites?: Array<GatewayRewrite>;
     redirects?: Array<GatewayRedirect>;
-    basePath?: String;
-    allowOptionRequest?: Boolean;
+    basePath?: string;
+    allowOptionRequest?: boolean;
     robotsConfig?: Object;
+    faviconBase64?: string;
 }
 // helpers
 export interface RobotsConfig {

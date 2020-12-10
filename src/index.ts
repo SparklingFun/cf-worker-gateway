@@ -1,7 +1,7 @@
 import _redirectRequest from "./modules/redirectRequest";
 import _rewriteRequest from "./modules/rewriteRequest";
 import { robotsHandler } from "./modules/robotsHandler";
-import { CustomFetchEvent, GatewayOption} from "./types";
+import { CustomFetchEvent, GatewayOption } from "./types";
 
 function gateway(event: CustomFetchEvent, options: GatewayOption): Response | CustomFetchEvent {
     if (options.allowOptionRequest) {
@@ -14,6 +14,18 @@ function gateway(event: CustomFetchEvent, options: GatewayOption): Response | Cu
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Headers': headerObj['access-control-request-headers'] || ''
                 })
+            })
+        }
+    }
+    // helper option
+    if (options.faviconBase64) {
+        if (event.request.method === 'GET' && event.request.url.endsWith('/favicon.ico')) {
+            const buffer = Buffer.alloc(35)
+            buffer.write(options.faviconBase64, 'base64')
+            return new Response(buffer, {
+                headers: {
+                    'Content-Type': 'image/x-icon'
+                }
             })
         }
     }
