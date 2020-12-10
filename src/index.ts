@@ -20,8 +20,7 @@ function gateway(event: CustomFetchEvent, options: GatewayOption): Response | Cu
     // helper option
     if (options.faviconBase64) {
         if (event.request.method === 'GET' && event.request.url.endsWith('/favicon.ico')) {
-            const buffer = Buffer.alloc(35)
-            buffer.write(options.faviconBase64, 'base64')
+            const buffer = Buffer.from(options.faviconBase64, 'base64');
             return new Response(buffer, {
                 headers: {
                     'Content-Type': 'image/x-icon'
