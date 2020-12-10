@@ -1,3 +1,12 @@
+## [0.1.7](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.7-canary.0...v0.1.7) (2020-12-10)
+
+
+### Bug Fixes
+
+* **helpers:** base64 should allow dynamic buffer size ([4e2b1c0](https://github.com/SparklingFun/cf-worker-gateway/commit/4e2b1c09d17a3906ebc1e082fc3b28ae14032a6a))
+
+
+
 ## [0.1.7-canary.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.6...v0.1.7-canary.0) (2020-12-10)
 
 
