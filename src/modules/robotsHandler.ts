@@ -30,7 +30,8 @@ ${sitemap}`).trim(), {
                 rule.allow.forEach(url => {
                     ruleText += `Allow: ${url}\n`
                 })
-            } else if (rule.disallow && rule.disallow.length) {
+            }
+            if (rule.disallow && rule.disallow.length) {
                 rule.disallow.forEach(url => {
                     ruleText += `Disallow: ${url}\n`
                 })

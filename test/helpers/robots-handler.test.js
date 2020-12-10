@@ -48,7 +48,7 @@ Disallow: /`);
   })
 });
 
-test('robotsHandler return allow first', () => {
+test('robotsHandler return allow & disallow both', () => {
   return robotsHandlerTester({
     rules: [
       {
@@ -61,7 +61,8 @@ test('robotsHandler return allow first', () => {
     let resText = await res.text()
     expect(resText).toBe(`User-agent: *
 Allow: /welcome
-Allow: /hello-world`);
+Allow: /hello-world
+Disallow: /`);
   })
 });
 
