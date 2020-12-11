@@ -20,6 +20,12 @@ function gateway(event: CustomFetchEvent, options: GatewayOption): Response | Cu
     // helper option
     if (options.faviconBase64) {
         if (event.request.method === 'GET' && event.request.url.endsWith('/favicon.ico')) {
+            // you can ignore all request of `favicon.ico`
+            if (options.faviconBase64 === 'ignored') {
+                return new Response(undefined, {
+                    status: 204
+                })
+            }
             const buffer = Buffer.from(options.faviconBase64, 'base64');
             return new Response(buffer, {
                 headers: {

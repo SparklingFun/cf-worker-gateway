@@ -59,6 +59,12 @@ As a gateway, you can make CORS much more simple, just enable `allowOptionReques
 
 > If you need `Access-Control-Allow-Headers`, you need to pay attention in ACTUAL response, such as a JSON `POST` response.
 
+### GatewayOptions - `faviconBase64`
+
+Using `Buffer` to return a `image/x-icon` ico image, allow you set a base64 image. 
+
+> If you just want to skip all error request about `favicon.ico`, you can set `ignored`.
+
 ### GatewayOptions - `rewrites`
 
 > `rewrite` rules have a higher priority than `redirects`.
