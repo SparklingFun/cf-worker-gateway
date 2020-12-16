@@ -14,7 +14,8 @@ addEventListener('fetch', event => {
   const req = new Cloudworker.Request('http://127.0.0.1' + testPath, init);
   const cw = new Cloudworker(simpleScript, {
     bindings: {
-      Event
+      Event,
+      Buffer
     }
   })
   return cw.dispatch(req)
