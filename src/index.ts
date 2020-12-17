@@ -19,9 +19,6 @@ function gateway(event: CustomFetchEvent, options: GatewayOption): Response | Cu
     }
     // helper option faviconBase64 (NOT RECOMMAND)
     if (options.faviconBase64) {
-        if (process.env.NODE_ENV !== "production") {
-            console.log('[Gateway Warning] faviconBase64 option is not configured with cache control, may cause a high CPU time!')
-        }
         if (event.request.method === 'GET' && event.request.url.endsWith('/favicon.ico')) {
             // you can ignore all request of `favicon.ico`
             if (options.faviconBase64 === 'ignored') {
