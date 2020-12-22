@@ -39,3 +39,8 @@ export interface EnvHelpers {
     Response?: Response;
     Request?: Request;
 }
+
+// since 0.2.0 new interfaces
+export interface CommonMiddleware {
+    (event: FetchEvent, next: Function, option?: any): Response | Event | void;
+}
