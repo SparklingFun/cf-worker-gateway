@@ -55,7 +55,9 @@ import redirect from "./middlewares/redirect";
 const Gateway = function(event: FetchEvent): Function {
     // middlewares quene
     const fns: Array<Function> = [];
+    let result: void;
     // main executer
+    // PS: it's a quene model, first `use`, first execute, first return when matched.
     const app = function(): void {
         let i = 0;
         function next() {
@@ -63,9 +65,11 @@ const Gateway = function(event: FetchEvent): Function {
             if (!task) {
                 return;
             }
-            return task(event, next);
+            let _t = task(event, next);
+            if(_t) result = _t;
         }
-        return next();
+        next();
+        return result;
     }
     app.use = function(handler: Function): void {
         fns.push(handler);
