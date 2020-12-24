@@ -7,10 +7,18 @@ export interface CustomFetchEvent extends FetchEvent {
 }
 
 export interface GatewayRewrite {
+    basePath?: string;
+    rules: Array<GatewayRewriteRule>;
+}
+export interface GatewayRewriteRule {
     source: string;
     destination: string;
 }
 export interface GatewayRedirect {
+    basePath?: string;
+    rules: Array<GatewayRedirectRule>;
+}
+export interface GatewayRedirectRule {
     source: string;
     destination: string;
     permanent?: boolean;
@@ -38,4 +46,9 @@ export interface RobotsConfigRule {
 export interface EnvHelpers {
     Response?: Response;
     Request?: Request;
+}
+
+// since 0.2.0 new interfaces
+export interface CommonMiddleware {
+    (event: FetchEvent, next: Function, option?: any): Response | Event | void;
 }

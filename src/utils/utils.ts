@@ -14,7 +14,8 @@ export function _matchPath(urlString: string, target: string): Boolean {
 }
 
 export function _modifyEvent(event: FetchEvent | CustomFetchEvent, modifiedReq: Object): FetchEvent {
-    let _req = event.request.clone();
+    // let _req = event.request.clone();
+    let _req = event.request;
     let newReq = Object.assign({}, _req, modifiedReq);
     let _evt = new Event("fetch");
     // @ts-ignore
