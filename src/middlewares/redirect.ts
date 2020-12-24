@@ -1,21 +1,20 @@
 import { _matchPath, _modifyEvent } from "../utils/utils";
-// import { GatewayRedirect } from "../types";
+import { GatewayRedirect } from "../types";
 
-const redirect = function (option: any) {
+const redirect = function (option: GatewayRedirect) {
     // middlewareWrapper = function (event, next) {
     return function (event: FetchEvent, next: Function) {
         // exceptions
         if (!option) {
             next();
         }
-        if (!Array.isArray(option)) {
+        if (!Array.isArray(option.rules)) {
             next();
         }
-        if (option.length < 1) {
+        if (option.rules.length < 1) {
             next();
         }
         // logic
-        // @ts-ignore
         const matched = option.rules.find(rule => {
             // fill source url if `basePath`
             const source = (option.basePath || "") + rule.source;

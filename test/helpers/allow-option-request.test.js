@@ -1,19 +1,15 @@
-const tester = require("../tester");
+const bootstrap = require("../bootstrap");
 
-test('Allow OPTIONS request', () => {
-    return tester({
-        allowOptionRequest: true
-    }, undefined, {
+test('[Helpers] Allow OPTIONS request', () => {
+    return bootstrap("/test2", "allowOption", undefined, {
         method: 'OPTIONS'
     }).then(res => {
         expect(res.status).toBe(204);
     })
 });
 
-test('Allow OPTIONS request with custom headers', () => {
-    return tester({
-        allowOptionRequest: true
-    }, undefined, {
+test('[Helpers] Allow OPTIONS request with custom headers', () => {
+    return bootstrap("/test2", "allowOption", undefined, {
         method: 'OPTIONS',
         headers: {
             "Test-Header": "this-is-a-test-header",

@@ -7,10 +7,18 @@ export interface CustomFetchEvent extends FetchEvent {
 }
 
 export interface GatewayRewrite {
+    basePath?: string;
+    rules: Array<GatewayRewriteRule>;
+}
+export interface GatewayRewriteRule {
     source: string;
     destination: string;
 }
 export interface GatewayRedirect {
+    basePath?: string;
+    rules: Array<GatewayRedirectRule>;
+}
+export interface GatewayRedirectRule {
     source: string;
     destination: string;
     permanent?: boolean;

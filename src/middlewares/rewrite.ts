@@ -1,9 +1,8 @@
 import { _matchPath, _modifyEvent } from "../utils/utils";
 import { GatewayRewrite, FetchEvent } from "../types";
 
-// TODO: Clearify option types
 // TODO: Should we support rewrite to CrossDomain?
-const rewrite = function (option: any) {
+const rewrite = function (option: GatewayRewrite) {
     return function (event: FetchEvent, next: Function) {
         // rules check
         if (!option.rules) next();
@@ -13,7 +12,6 @@ const rewrite = function (option: any) {
         }
         if (!option.rules.length) next();
         // check complete, start rewrite
-        // @ts-ignore
         let matched = option.rules.find(rule => {
             // fill source url if `basePath`
             const source = (option.basePath || "") + rule.source;

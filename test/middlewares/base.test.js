@@ -60,18 +60,22 @@ test('[Base] Multi middlewares with response should return first match', () => {
 // multi middleware modify event test (using rewrite, should compare to `rewrite` unit test)
 test('[Base] Middlewares which modify event should return all modification', () => {
   return gatewayTester('/test', `
-    app.use(rewrite([
-      {
-        source: '/test',
-        destination: '/test2',
-      }
-    ]))
-    app.use(rewrite([
-      {
-        source: '/test2',
-        destination: '/docs/test2',
-      }
-    ]))
+    app.use(rewrite({
+      rules: [
+        {
+          source: '/test',
+          destination: '/test2',
+        }
+      ]
+    }))
+    app.use(rewrite({
+      rules: [
+        {
+          source: '/test2',
+          destination: '/docs/test2',
+        }
+      ]
+    }))
   `).then(async res => {
     const resText = await res.text();
     expect(resText).toBe(origin + '/docs/test2');
