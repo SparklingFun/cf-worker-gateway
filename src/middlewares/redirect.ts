@@ -1,11 +1,9 @@
 import { _matchPath, _modifyEvent } from "../utils/utils";
-import { CommonMiddleware, GatewayRedirect } from "../types";
+// import { GatewayRedirect } from "../types";
 
-const redirect = function (option: Array<GatewayRedirect>) {
-    let middlewareWrapper: CommonMiddleware;
+const redirect = function (option: any) {
     // middlewareWrapper = function (event, next) {
-        // @ts-ignore
-    return function (event, next) {
+    return function (event: FetchEvent, next: Function) {
         // exceptions
         if (!option) {
             next();
@@ -17,10 +15,10 @@ const redirect = function (option: Array<GatewayRedirect>) {
             next();
         }
         // logic
-        const matched = option.find(rule => {
+        // @ts-ignore
+        const matched = option.rules.find(rule => {
             // fill source url if `basePath`
-            // const source = (option.basePath || "") + rule.source;
-            const source = rule.source;
+            const source = (option.basePath || "") + rule.source;
             return _matchPath(event.request.url, source);
         });
         if (matched) {
@@ -28,19 +26,19 @@ const redirect = function (option: Array<GatewayRedirect>) {
                 next();
             }
             let origin = new URL(event.request.url).origin;
-            let isCrossOrigin = false
+            let fullURL = false
             try {
                 new URL(matched.destination);
-                isCrossOrigin = true
+                fullURL = true;
             } catch (e) {
                 // console.log(e.message)
             }
-            // if (!matched.crossOrigin && isCrossOrigin) {
-            //     console.log('Cross Origin redirect should be configured as `crossOrigin`')
-            //     return;
-            // }
+            if (fullURL && option.basePath) {
+                console.log('When basePath is configured, destination should not be a full URL!')
+                return;
+            }
             // @ts-ignore
-            return Response.redirect(origin + matched.destination, matched.permanent ? 308 : 307);
+            return Response.redirect(fullURL ? matched.destination : origin + (option.basePath || "") + matched.destination, matched.permanent ? 308 : 307);
         }
         // if no match, use `next()` to skip.
         next();

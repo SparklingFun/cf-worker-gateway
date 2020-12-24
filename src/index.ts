@@ -1,5 +1,7 @@
 import { FetchEvent } from "./types";
 import redirect from "./middlewares/redirect";
+import rewrite from "./middlewares/rewrite";
+
 
 // function gateway(event: CustomFetchEvent, options: GatewayOption): Response | CustomFetchEvent {
 //     if (options.allowOptionRequest) {
@@ -55,21 +57,26 @@ import redirect from "./middlewares/redirect";
 const Gateway = function(event: FetchEvent): Function {
     // middlewares quene
     const fns: Array<Function> = [];
-    let result: void;
+    let seizeResp: Response | undefined = undefined;
     // main executer
     // PS: it's a quene model, first `use`, first execute, first return when matched.
-    const app = function(): void {
+    const app = function(): Response | FetchEvent {
         let i = 0;
-        function next() {
+        let modified = event;
+        function next(stdinEvent: FetchEvent = event) {
+            if(stdinEvent !== event) modified = stdinEvent;
             let task = fns[i++];
             if (!task) {
                 return;
             }
-            let _t = task(event, next);
-            if(_t) result = _t;
+            let _t = task(stdinEvent, next);
+            if(_t && _t instanceof Response) seizeResp = _t;
         }
-        next();
-        return result;
+        next(modified);
+        if (seizeResp && seizeResp instanceof Response) {
+            return seizeResp;
+        }
+        return modified;
     }
     app.use = function(handler: Function): void {
         fns.push(handler);
@@ -77,5 +84,5 @@ const Gateway = function(event: FetchEvent): Function {
     return app;
 }
 
-export { redirect };
+export { redirect, rewrite };
 export default Gateway;
