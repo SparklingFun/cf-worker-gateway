@@ -18,6 +18,7 @@ export default function faviconByBase64(b64str: string) {
             }
         } else {
             next();
+            return;
         }
     }
 }

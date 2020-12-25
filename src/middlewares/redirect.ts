@@ -7,12 +7,15 @@ const redirect = function (option: GatewayRedirect) {
         // exceptions
         if (!option) {
             next();
+            return;
         }
         if (!Array.isArray(option.rules)) {
             next();
+            return;
         }
         if (option.rules.length < 1) {
             next();
+            return;
         }
         // logic
         const matched = option.rules.find(rule => {
@@ -41,6 +44,7 @@ const redirect = function (option: GatewayRedirect) {
         }
         // if no match, use `next()` to skip.
         next();
+        return;
     }
     // return middlewareWrapper;
 }

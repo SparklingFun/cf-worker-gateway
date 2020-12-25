@@ -12,6 +12,7 @@ export default function allowOption() {
             })
         } else {
             next();
+            return;
         }
     }
 }

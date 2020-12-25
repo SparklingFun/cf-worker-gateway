@@ -5,12 +5,19 @@ import { GatewayRewrite, FetchEvent } from "../types";
 const rewrite = function (option: GatewayRewrite) {
     return function (event: FetchEvent, next: Function) {
         // rules check
-        if (!option.rules) next();
+        if (!option.rules) {
+            next();
+            return;
+        }
         if (!Array.isArray(option.rules)) {
             console.log("[Gateway Error] `rewrites` config is not an Array! Continuous working in disabled mode.");
             next();
+            return;
         }
-        if (!option.rules.length) next();
+        if (!option.rules.length) {
+            next();
+            return;
+        }
         // check complete, start rewrite
         let matched = option.rules.find(rule => {
             // fill source url if `basePath`
@@ -27,6 +34,7 @@ const rewrite = function (option: GatewayRewrite) {
         }
         // no rewrite rule matched
         next();
+        return;
     }
 }
 
