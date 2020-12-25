@@ -1,3 +1,20 @@
+# [0.2.0-canary.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.7...v0.2.0-canary.0) (2020-12-25)
+
+
+### Bug Fixes
+
+* **preview:** fix multi middleware caused mistake return ([adf9853](https://github.com/SparklingFun/cf-worker-gateway/commit/adf985322f61a96690e2fcd721706151b2d49bb8))
+* process should not be contained ([022d28e](https://github.com/SparklingFun/cf-worker-gateway/commit/022d28edf6bde80c0949bd5f84356359fde41ffa))
+
+
+### Features
+
+* **0.2.0:** canary ([abd8412](https://github.com/SparklingFun/cf-worker-gateway/commit/abd84120a08ee23da23c1c008a1f73c56b53c3d8))
+* **preview:** finish middleware basic ([8a62a0f](https://github.com/SparklingFun/cf-worker-gateway/commit/8a62a0f452d7b7d81d0a085e806d34996fe58f40))
+* add favicon test (NOT RECOMMAND) ([756aef8](https://github.com/SparklingFun/cf-worker-gateway/commit/756aef88d6a15c6982a85fba1ee256c1930f7032))
+
+
+
 ## [0.1.7](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.7-canary.0...v0.1.7) (2020-12-10)
 
 
