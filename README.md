@@ -2,7 +2,7 @@
 
 ![Workflow](https://github.com/SparklingFun/cf-worker-gateway/workflows/Publish/badge.svg)
 
-> If you are using version below 0.2.0, please read README.old.md to see full reference.
+> If you are using version below 0.2.0, please read [README.old.md](https://github.com/SparklingFun/cf-worker-gateway/blob/main/README.old.md) to see full reference.
 
 ## Usage
 
@@ -126,7 +126,7 @@ app.use(robotsTxt({
     rules: [
         {
             userAgent: "GoogleBot",
-            disallow: ["/"]
+            allow: ["/"]
         },
         {
             userAgent: "Bingbot",
