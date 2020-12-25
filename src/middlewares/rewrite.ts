@@ -30,6 +30,8 @@ const rewrite = function (option: GatewayRewrite) {
             let newEvt = _modifyEvent(event, {
                 url: new URL(event.request.url).origin + (option.basePath || "") + matched.destination
             })
+            // @ts-ignore
+            if(!newEvt.$$origin) newEvt.$$origin = event;
             next(newEvt);
         }
         // no rewrite rule matched
