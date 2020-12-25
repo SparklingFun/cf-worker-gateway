@@ -23,3 +23,7 @@ export function _modifyEvent(event: FetchEvent | CustomFetchEvent, modifiedReq: 
     // @ts-ignore
     return _evt;
 }
+
+export function cfRealIp(event: FetchEvent): string {
+    return event.request.headers.get("CF-Connecting-IP") || "";
+}

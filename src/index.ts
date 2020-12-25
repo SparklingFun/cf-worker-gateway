@@ -5,6 +5,7 @@ import rewrite from "./middlewares/rewrite";
 import faviconByBase64 from "./deprecated/faviconByBase64";
 import allowOption from "./helpers/allowOption";
 import robotsTxt from "./helpers/robotsTxt";
+import ipController from "./helpers/ipController";
 
 const Gateway = function(event: FetchEvent): Function {
     // middlewares quene
@@ -36,5 +37,5 @@ const Gateway = function(event: FetchEvent): Function {
     return app;
 }
 
-export { redirect, rewrite, faviconByBase64, allowOption, robotsTxt };
+export { redirect, rewrite, faviconByBase64, allowOption, robotsTxt, ipController };
 export default Gateway;

@@ -20,7 +20,8 @@
     "url": "https://github.com/SparklingFun/cf-worker-gateway"
   },
   "dependencies": {
-    "glob-to-regexp": "^0.4.1"
+    "glob-to-regexp": "^0.4.1",
+    "ipaddr.js": "^2.0.0"
   },
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.12.1",
