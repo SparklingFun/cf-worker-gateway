@@ -1,3 +1,12 @@
+## [0.2.1-canary.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.2.0-canary.0...v0.2.1-canary.0) (2020-12-25)
+
+
+### Bug Fixes
+
+* **0.2.0:** add return after `next()` because should break out middleware ([a7366c0](https://github.com/SparklingFun/cf-worker-gateway/commit/a7366c04d22c6eb5210af9aa4a4194a60be4096a))
+
+
+
 # [0.2.0-canary.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.1.7...v0.2.0-canary.0) (2020-12-25)
 
 
