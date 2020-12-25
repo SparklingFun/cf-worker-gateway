@@ -1,3 +1,12 @@
+## [0.2.2-canary.1.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.2.1-canary.0...v0.2.2-canary.1.0) (2020-12-25)
+
+
+### Bug Fixes
+
+* **0.2.0:** rewrite should save origin request ([7f8efd2](https://github.com/SparklingFun/cf-worker-gateway/commit/7f8efd228455ef0fa84ac71f8b42fbce7a1d7cf6))
+
+
+
 ## [0.2.1-canary.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.2.0-canary.0...v0.2.1-canary.0) (2020-12-25)
 
 
