@@ -1,3 +1,17 @@
+## [0.2.3-canary.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.2.2-canary.1.0...v0.2.3-canary.0) (2020-12-28)
+
+
+### Bug Fixes
+
+* **main:** fix modified event loss & condition check order in deprecated/faviconByBase64 ([dd4a414](https://github.com/SparklingFun/cf-worker-gateway/commit/dd4a414af6abe332b4aa38d171a1e423e2a98dce))
+
+
+### Features
+
+* **helpers:** add ip controller ([3a35e3e](https://github.com/SparklingFun/cf-worker-gateway/commit/3a35e3ee92546978fe88e21af85f86e0469deea2))
+
+
+
 ## [0.2.2-canary.1.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.2.1-canary.0...v0.2.2-canary.1.0) (2020-12-25)
 
 
