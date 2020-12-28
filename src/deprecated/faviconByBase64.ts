@@ -1,8 +1,8 @@
 // helper option faviconBase64 (NOT RECOMMAND)
 export default function faviconByBase64(b64str: string) {
     return function (event: FetchEvent, next: Function) {
-        if (b64str) {
-            if (event.request.method === 'GET' && event.request.url.endsWith('/favicon.ico')) {
+        if (event.request.method === 'GET' && event.request.url.endsWith('/favicon.ico')) {
+            if (b64str) {
                 // you can ignore all request of `favicon.ico`
                 if (b64str === 'ignored') {
                     return new Response(undefined, {
@@ -15,6 +15,9 @@ export default function faviconByBase64(b64str: string) {
                         'Content-Type': 'image/x-icon'
                     }
                 })
+            } else {
+                next();
+                return;
             }
         } else {
             next();

@@ -16,13 +16,15 @@ const Gateway = function(event: FetchEvent): Function {
     const app = function(): Response | FetchEvent {
         let i = 0;
         let modified = event;
-        function next(stdinEvent: FetchEvent = event) {
-            if(stdinEvent !== event) modified = stdinEvent;
+        function next(stdinEvent: FetchEvent) {
+            if(stdinEvent !== event && stdinEvent) {
+                modified = stdinEvent
+            };
             let task = fns[i++];
             if (!task) {
                 return;
             }
-            let _t = task(stdinEvent, next);
+            let _t = task(stdinEvent || modified, next);
             if(_t && _t instanceof Response) seizeResp = _t;
         }
         next(modified);
