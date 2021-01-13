@@ -2,18 +2,14 @@ const fs = require('fs');
 const Cloudworker = require("@dollarshaveclub/cloudworker");
 const code = fs.readFileSync(process.cwd() + "/dist/index.js");
 
-function gatewayTester(testPath = '/test2', middlewareName, options, init = {method: 'GET'}) {
-  let opt = options;
-  if(typeof opt === 'object') {
-    opt = JSON.stringify(options);
-  }
+function gatewayTester(testPath = '/test2', functionCode, init = {method: 'GET'}) {
   const simpleScript = `
 ${code.toString().replace(/export [\s\S]*;/g, '')}
 
 addEventListener('fetch', event => {
     const app = new Gateway(event);
-    
-    app.use(${middlewareName}(${opt || ''}));
+
+    app.use(${functionCode});
 
     const gatewayResult = app();
 

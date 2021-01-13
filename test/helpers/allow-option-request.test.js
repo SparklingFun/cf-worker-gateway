@@ -1,7 +1,7 @@
 const bootstrap = require("../bootstrap");
 
 test('[Helpers] Allow OPTIONS request', () => {
-    return bootstrap("/test2", "allowOption", undefined, {
+    return bootstrap("/test2", "allowOption()", {
         method: 'OPTIONS'
     }).then(res => {
         expect(res.status).toBe(204);
@@ -9,7 +9,7 @@ test('[Helpers] Allow OPTIONS request', () => {
 });
 
 test('[Helpers] Allow OPTIONS request with custom headers', () => {
-    return bootstrap("/test2", "allowOption", undefined, {
+    return bootstrap("/test2", "allowOption()", {
         method: 'OPTIONS',
         headers: {
             "Test-Header": "this-is-a-test-header",

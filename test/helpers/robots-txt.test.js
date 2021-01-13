@@ -18,14 +18,14 @@ const bootstrap = require("../bootstrap");
 // }
 
 test('robotsHandler return all allow', () => {
-    return bootstrap('/robots.txt', 'robotsTxt', {
+    return bootstrap('/robots.txt', `robotsTxt({
         rules: [
             {
                 userAgent: "*",
                 allow: ["/"]
             }
         ]
-    }).then(async res => {
+    })`).then(async res => {
         let resText = await res.text()
         expect(resText).toBe(`User-agent: *
 Allow: /`);
@@ -33,14 +33,14 @@ Allow: /`);
 });
 
 test('robotsHandler return all disallow', () => {
-    return bootstrap('/robots.txt', 'robotsTxt', {
+    return bootstrap('/robots.txt', `robotsTxt({
         rules: [
             {
                 userAgent: "*",
                 disallow: ["/"]
             }
         ]
-    }).then(async res => {
+    })`).then(async res => {
         let resText = await res.text()
         expect(resText).toBe(`User-agent: *
 Disallow: /`);
@@ -48,7 +48,7 @@ Disallow: /`);
 });
 
 test('robotsHandler return allow & disallow both', () => {
-    return bootstrap('/robots.txt', 'robotsTxt', {
+    return bootstrap('/robots.txt', `robotsTxt({
         rules: [
             {
                 userAgent: "*",
@@ -56,7 +56,7 @@ test('robotsHandler return allow & disallow both', () => {
                 disallow: ["/"]
             }
         ]
-    }).then(async res => {
+    })`).then(async res => {
         let resText = await res.text()
         expect(resText).toBe(`User-agent: *
 Allow: /welcome
@@ -66,7 +66,7 @@ Disallow: /`);
 });
 
 test('robotsHandler multi User-agent', () => {
-    return bootstrap('/robots.txt', 'robotsTxt', {
+    return bootstrap('/robots.txt', `robotsTxt({
         rules: [
             {
                 userAgent: "GoogleBot",
@@ -77,7 +77,7 @@ test('robotsHandler multi User-agent', () => {
                 disallow: ["/google-only"]
             }
         ]
-    }).then(async res => {
+    })`).then(async res => {
         let resText = await res.text()
         expect(resText).toBe(`User-agent: GoogleBot
 Disallow: /
@@ -87,7 +87,7 @@ Disallow: /google-only`);
 });
 
 test('robotsHandler multi User-agent with sitemap', () => {
-    return bootstrap('/robots.txt', 'robotsTxt', {
+    return bootstrap('/robots.txt', `robotsTxt({
         rules: [
             {
                 userAgent: "GoogleBot",
@@ -99,7 +99,7 @@ test('robotsHandler multi User-agent with sitemap', () => {
             }
         ],
         sitemapUrl: ["https://localhost/sitemap.xml"]
-    }).then(async res => {
+    })`).then(async res => {
         let resText = await res.text()
         expect(resText).toBe(`User-agent: GoogleBot
 Disallow: /
