@@ -3,19 +3,16 @@ import { GatewayRewrite, FetchEvent } from "../types";
 
 // TODO: Should we support rewrite to CrossDomain?
 const rewrite = function (option: GatewayRewrite) {
-    return function (event: FetchEvent, next: Function) {
+    return function (event: FetchEvent) {
         // rules check
         if (!option.rules) {
-            next();
             return;
         }
         if (!Array.isArray(option.rules)) {
             console.log("[Gateway Error] `rewrites` config is not an Array! Continuous working in disabled mode.");
-            next();
             return;
         }
         if (!option.rules.length) {
-            next();
             return;
         }
         // check complete, start rewrite
@@ -26,16 +23,15 @@ const rewrite = function (option: GatewayRewrite) {
         });
         if (matched) {
             // wrong config
-            if (!matched.destination) next();
+            if (!matched.destination) return;
             let newEvt = _modifyEvent(event, {
                 url: new URL(event.request.url).origin + (option.basePath || "") + matched.destination
             })
             // @ts-ignore
             if(!newEvt.$$origin) newEvt.$$origin = event;
-            next(newEvt);
+            return newEvt;
         }
         // no rewrite rule matched
-        next();
         return;
     }
 }

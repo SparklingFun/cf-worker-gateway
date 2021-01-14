@@ -13,9 +13,11 @@ addEventListener('fetch', event => {
     
     ${middlewaresCode || ''}
 
-    const gatewayResult = app();
-
-    event.respondWith(gatewayResult instanceof Response ? gatewayResult : new Response(gatewayResult.request.url, {status: 200}));
+    app.use((event) => {
+      return new Response(event.request.url, {status: 200})
+    });
+    
+    return event.respondWith(app.run());
 })
 `
   const req = new Cloudworker.Request('http://127.0.0.1' + testPath);
@@ -31,25 +33,19 @@ addEventListener('fetch', event => {
 // multi return response test
 test('[Base] Multi middlewares with response should return first match', () => {
   return gatewayTester('/test2', `
-      app.use(function(event, next) {
+      app.use(function(event) {
         if(event.request.url === "http://127.0.0.1/test") {
           return new Response("test", {status: 204});
-        } else {
-          next();
         }
       })
-      app.use(function(event, next) {
+      app.use(function(event) {
         if(event.request.url === "http://127.0.0.1/test2") {
           return new Response("test", {status: 200});
-        } else {
-          next();
         }
       })
-      app.use(function(event, next) {
+      app.use(function(event) {
         if(event.request.url === "http://127.0.0.1/test2") {
           return new Response("test", {status: 400});
-        } else {
-          next();
         }
       })
     `).then(res => {

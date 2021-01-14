@@ -3,18 +3,15 @@ import { GatewayRedirect } from "../types";
 
 const redirect = function (option: GatewayRedirect) {
     // middlewareWrapper = function (event, next) {
-    return function (event: FetchEvent, next: Function) {
+    return function (event: FetchEvent) {
         // exceptions
         if (!option) {
-            next();
             return;
         }
         if (!Array.isArray(option.rules)) {
-            next();
             return;
         }
         if (option.rules.length < 1) {
-            next();
             return;
         }
         // logic
@@ -25,7 +22,7 @@ const redirect = function (option: GatewayRedirect) {
         });
         if (matched) {
             if (!matched.destination) {
-                next();
+                return;
             }
             let origin = new URL(event.request.url).origin;
             let fullURL = false
@@ -43,7 +40,6 @@ const redirect = function (option: GatewayRedirect) {
             return Response.redirect(fullURL ? matched.destination : origin + (option.basePath || "") + matched.destination, matched.permanent ? 308 : 307);
         }
         // if no match, use `next()` to skip.
-        next();
         return;
     }
     // return middlewareWrapper;
