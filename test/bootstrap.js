@@ -2,22 +2,19 @@ const fs = require('fs');
 const Cloudworker = require("@dollarshaveclub/cloudworker");
 const code = fs.readFileSync(process.cwd() + "/dist/index.js");
 
-function gatewayTester(testPath = '/test2', middlewareName, options, init = {method: 'GET'}) {
-  let opt = options;
-  if(typeof opt === 'object') {
-    opt = JSON.stringify(options);
-  }
+function gatewayTester(testPath = '/test2', functionCode, init = { method: 'GET' }) {
   const simpleScript = `
 ${code.toString().replace(/export [\s\S]*;/g, '')}
 
 addEventListener('fetch', event => {
     const app = new Gateway(event);
+
+    app.use(${functionCode});
+    app.use((event) => {
+      return new Response(event.request.url, {status: 200})
+    });
     
-    app.use(${middlewareName}(${opt || ''}));
-
-    const gatewayResult = app();
-
-    event.respondWith(gatewayResult instanceof Response ? gatewayResult : new Response(gatewayResult.request.url, {status: 200}));
+    return event.respondWith(app.run());
 })
 `
   const req = new Cloudworker.Request('http://127.0.0.1' + testPath, init);
@@ -26,8 +23,8 @@ addEventListener('fetch', event => {
       Event,
       Buffer
     }
-  })
-  return cw.dispatch(req)
+  });
+  return cw.dispatch(req);
 }
 
 module.exports = gatewayTester
