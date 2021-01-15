@@ -1,3 +1,12 @@
+# [0.3.0-canary.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.2.3-canary.0...v0.3.0-canary.0) (2021-01-15)
+
+
+### Features
+
+* **0.3.0:** change to async mode to support async middlewares ([#7](https://github.com/SparklingFun/cf-worker-gateway/issues/7)) ([ba4f435](https://github.com/SparklingFun/cf-worker-gateway/commit/ba4f43544756f814980849c4758cae7f9bfd22e6))
+
+
+
 ## [0.2.3-canary.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.2.2-canary.1.0...v0.2.3-canary.0) (2020-12-28)
 
 
