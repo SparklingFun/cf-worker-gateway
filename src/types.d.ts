@@ -43,12 +43,17 @@ export interface RobotsConfigRule {
     disallow?: Array<string>;
     crawlDelay?: number;
 }
+export interface RateLimitConfigType {
+    whitelist?: Array<string>;
+    rules: Array<RateLimitRuleType>;
+    jailKVSpace: any;
+}
+export interface RateLimitRuleType {
+    path: string;
+    times: number;
+    banTime: number;
+}
 export interface EnvHelpers {
     Response?: Response;
     Request?: Request;
-}
-
-// since 0.2.0 new interfaces
-export interface CommonMiddleware {
-    (event: FetchEvent, next: Function, option?: any): Response | Event | void;
 }
