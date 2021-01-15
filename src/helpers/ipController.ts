@@ -10,21 +10,17 @@ export interface ipControllerOption {
 export default function ipController(option: any) {
     return function(event: FetchEvent, next: Function) {
         if(!option) {
-            next();
             return;
         }
         if(option.allow && !Array.isArray(option.allow)) {
-            next();
             return;
         }
         if(option.deny && !Array.isArray(option.deny)) {
-            next();
             return;
         }
         const realIP = cfRealIp(event);
         
         if(!realIP) {
-            next();
             return;
         }
         if(option.allow) {
@@ -38,7 +34,6 @@ export default function ipController(option: any) {
                     status: 403
                 })
             } else {
-                next();
                 return;
             }
         } else if (option.deny) {
@@ -52,12 +47,10 @@ export default function ipController(option: any) {
                     status: 403
                 })
             } else {
-                next();
                 return;
             }
         } else {
             console.log("[Gateway] ipController - configuration is not take effect.");
-            next();
             return;
         }
     }

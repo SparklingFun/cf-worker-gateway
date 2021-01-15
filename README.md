@@ -2,7 +2,7 @@
 
 ![Workflow](https://github.com/SparklingFun/cf-worker-gateway/workflows/Publish/badge.svg)
 
-> If you are using version below 0.2.0, please read [README.old.md](https://github.com/SparklingFun/cf-worker-gateway/blob/main/README.old.md) to see full reference.
+> Versions below `0.3.0-canary.0` and above `0.2.0-canary.0` only support SYNC middlewares, below `0.2.0-canary.0` are not in middleware mode, if you are using these versions, please read [README.old.md](https://github.com/SparklingFun/cf-worker-gateway/blob/main/README.old.md) to see reference.
 
 ## Usage
 
@@ -11,8 +11,8 @@ Pre-handle requests that worker receive, get directly response or modify event, 
 ## Quick Start
 
 ```bash
-npm install cf-worker-gateway@0.2.0-canary.1 --save
-# yarn add cf-worker-gateway@0.2.0-canary.1
+npm install cf-worker-gateway@0.3.0-canary.0 --save
+# yarn add cf-worker-gateway@0.3.0-canary.0
 ```
 
 A very simple example:
@@ -28,31 +28,37 @@ addEventListener('fetch', (event) => {
             destination: '/api/test'
         }]
     })
-    const gatewayResult = app();
-    event.respondWith(gatewayResult instanceof Response ? gatewayResult : handleRequest(gatewayResult); // handleRequest is your function to map assets, decided on which package you used.
-})
+    // add your own handler at the last app.use(), such as `handleEvent` or `getAssestFromKV`
+    app.use((event) => {
+        handleRequest(event);
+    })
+    
+    event.respondWith(app.run());
+}
 ```
 
 ## Middleware
 
 When `cf-worker-gateway` was create, it contains a plenty of configure options and functions, which are not organized well. This is the reason why "middleware" design was applied since 0.2.0 (canary versions). Different middlewares for different usage, can be easily import from package. Or you can easily make your own middleware just follow the guide below.
 
-A simple guide for create a new middleware:
+> Async middlewares are supported from `0.3.0-canary.0`, please take care!
+
+A simple guide for creating a new middleware:
 
 ```javascript
 // your custom middleware
 function customizedMiddleware(option) { // if you need pass some options, a wrapper is needed.
-    return function(event, next) { // all middleware apply to 2 parameters, event, and next();
+    return async function(event) { // all middleware apply to 1 parameters, event;
         // const someRule = ...
         // const otherRule = ...
         if(someRule) {
             return new Response(); // you can directly return a response when matched
         } else if(otherRule) {
             let modifiedEvent = new Event('fetch');
-            next(modifiedEvent); // modify event, and pass to next, this modification will not lose
+            return modifiedEvent; // modify event, and pass to next, this modification will not lose
         } else {
             // all rules are not match, please call next() without any param
-            next();
+            return;
         }
     }
 }
@@ -139,7 +145,7 @@ app.use(robotsTxt({
 
 ### deprecated
 
-> __Warning: These middlewares may effect your worker performance, please use CAREFULLY.__
+> __Warning: These middlewares may effect your worker performance, obviously in async middleware mode, please use CAREFULLY.__
 
 #### faviconByBase64
 
