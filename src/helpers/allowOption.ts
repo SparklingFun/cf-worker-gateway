@@ -1,5 +1,5 @@
 export default function allowOption() {
-    return function (event: FetchEvent, next: Function) {
+    return function (event: FetchEvent) {
         if (event.request.method === 'OPTIONS') {
             // @ts-ignore
             let headerObj = Object.fromEntries(event.request.headers);
@@ -10,9 +10,7 @@ export default function allowOption() {
                     'Access-Control-Allow-Headers': headerObj['access-control-request-headers'] || ''
                 })
             })
-        } else {
-            next();
-            return;
         }
+        return;
     }
 }

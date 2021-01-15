@@ -8,7 +8,7 @@ export interface ipControllerOption {
 }
 
 export default function ipController(option: any) {
-    return function(event: FetchEvent, next: Function) {
+    return function(event: FetchEvent) {
         if(!option) {
             return;
         }

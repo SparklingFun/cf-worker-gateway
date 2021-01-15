@@ -2,13 +2,11 @@ import { RobotsConfig } from "../types";
 
 // [Reference](https://www.cloudflare.com/zh-cn/learning/bots/what-is-robots.txt)
 export default function robotsTxt (option: RobotsConfig): Function {
-    return function (event: FetchEvent, next: Function): Response | undefined {
+    return function (event: FetchEvent): Response | undefined {
         if (!(new URL(event.request.url).pathname.endsWith('/robots.txt'))) {
-            next();
             return;
         };
         if (!option) {
-            next();
             return;
         };
         // decode config
