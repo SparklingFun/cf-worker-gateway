@@ -31,7 +31,6 @@ export default function accessRateLimit(options: RateLimitConfigType) {
             const jailRecord: Array<number> = await options.jailKVSpace.get(`path:${encodeURIComponent(matched.path)}|ip:${realIP}`, "json");
             // except expired records
             if (jailRecord) {
-                console.log(jailRecord);
                 const effectRecord = jailRecord.filter(item => item + matched.banTime > new Date().getTime());
                 if (effectRecord.length >= matched.times) {
                     return new Response(null, {

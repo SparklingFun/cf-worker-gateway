@@ -2,6 +2,7 @@ const fs = require('fs');
 const Cloudworker = require("@dollarshaveclub/cloudworker");
 const code = fs.readFileSync(process.cwd() + "/dist/index.js");
 const KeyValueStore = require("@dollarshaveclub/cloudworker/lib/kv").KeyValueStore;
+const Request = require("@dollarshaveclub/cloudworker/lib/runtime").Request;
 
 function gatewayTester(testPath = '/test2', functionCode, init = { method: 'GET' }) {
   const simpleScript = `
@@ -17,7 +18,6 @@ addEventListener('fetch', event => {
     return event.respondWith(app.run());
 })
 `
-  const req = new Cloudworker.Request('http://127.0.0.1' + testPath, init);
   const cw = new Cloudworker(simpleScript, {
     bindings: {
       Event,
@@ -25,7 +25,10 @@ addEventListener('fetch', event => {
       KeyValueStore: new KeyValueStore()
     }
   });
-  return cw.dispatch(req);
+  // const req = new Cloudworker.Request('http://127.0.0.1' + testPath, init);
+  return { cw, run: () => {
+    return cw.dispatch(new Request('http://127.0.0.1' + testPath, init));
+  } };
 }
 
 module.exports = gatewayTester
