@@ -7,6 +7,7 @@ import allowOption from "./helpers/allowOption";
 import robotsTxt from "./helpers/robotsTxt";
 import ipController from "./helpers/ipController";
 import accessRateLimit from "./helpers/accessRateLimit";
+import basicAuth from "./helpers/basicAuth";
 
 const Gateway = function (event: FetchEvent): Function {
     // middlewares quene
@@ -45,5 +46,6 @@ const Gateway = function (event: FetchEvent): Function {
     return app;
 }
 
-export { redirect, rewrite, faviconByBase64, allowOption, robotsTxt, ipController, accessRateLimit };
+// Only for jest testing, not recommand to use directly from index.
+export { redirect, rewrite, faviconByBase64, allowOption, robotsTxt, ipController, accessRateLimit, basicAuth };
 export default Gateway;
