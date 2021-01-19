@@ -24,7 +24,7 @@ jobs:
       with:
         node-version: 12
     - run: npm i
-    - run: npm test
+    - run: npm test:coverage
   publish:
     needs: test
     runs-on: ubuntu-latest
