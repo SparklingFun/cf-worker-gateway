@@ -1,3 +1,7 @@
+## [0.3.1-canary.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.3.0-canary.0...v0.3.1-canary.0) (2021-01-19)
+
+
+
 # [0.3.0-canary.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.2.3-canary.0...v0.3.0-canary.0) (2021-01-15)
 
 
