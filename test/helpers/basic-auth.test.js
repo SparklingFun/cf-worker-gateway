@@ -30,11 +30,11 @@ test('[Helpers] Wrong password will be blocked',async () => {
     return expect(res.status).toBe(401);
 });
 
-test('[Helpers] Child path will also be blocked',async () => {
+test('[Helpers] Children paths will also be blocked',async () => {
     const username = "YOUR_USER_NAME";
     const password = "YOUR_PASSWORDRD";
-    const tester = bootstrap("/test2/docs", `basicAuth({
-        path: "/test2/*"
+    const tester = bootstrap("/test2", `basicAuth({
+        path: ["/test2", "/test2/**"]
     })`, {
         method: 'GET',
         headers: {
@@ -45,7 +45,7 @@ test('[Helpers] Child path will also be blocked',async () => {
     return expect(res.status).toBe(401);
 });
 
-test('[Helpers] All path test Auth',async () => {
+test('[Helpers] Unset path means all path',async () => {
     const username = "YOUR_USER_NAME";
     const password = "YOUR_PASSWORDRD";
     const tester = bootstrap("/test2", `basicAuth()`, {

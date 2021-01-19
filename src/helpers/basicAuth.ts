@@ -64,12 +64,16 @@ const parseAuthHeader = function (string: string | null) {
 
 export default function basicAuth(options: any) {
     if(!options) options = {};
-    const path = options.path || "*";
+    let path = options.path || "/*";
     const USER_NAME = options.USER_NAME || NAME;
     const USER_PASS = options.USER_PASS || PASS;
     return function (event: CustomFetchEvent) {
         const requestUrl = event.$$origin ? event.$$origin.request.url : event.request.url;
-        if(!_matchPath(requestUrl, path)) {
+        if(typeof path === "string") {
+            path = [path]
+        }
+        const matched = path.find((item: string) => _matchPath(requestUrl, item))
+        if(!matched) {
             return;
         }
         const credentials = parseAuthHeader(event.request.headers.get("Authorization"));

@@ -188,7 +188,7 @@ For example,
 import basicAuth from "cf-worker-gateway/helpers/basicAuth";
 
 app.use(basicAuth({
-    path: "/admin",
+    path: "/admin", // You can also use an array, like `["/admin", "/admin/**"]` to specify multi path.
     USER_NAME: "YOUR_USER_NAME",
     USER_PASS: "YOUR_PASSWORD"
 }))

@@ -9,7 +9,7 @@ export function _matchPath(urlString: string, target: string): Boolean {
         console.log("[Gateway Error] Request URL '" + urlString + "': Invalid URL.");
         return false;
     }
-    let re = globToRegExp(target);
+    let re = globToRegExp(target, {globstar: true});
     return re.test(url.pathname);
 }
 
