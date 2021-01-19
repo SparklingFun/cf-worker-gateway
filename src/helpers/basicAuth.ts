@@ -1,6 +1,11 @@
+// Reference: [MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication)
+
+import { _matchPath } from "../utils/utils";
+import { CustomFetchEvent } from "../types";
+
 // inspired from [This Link](https://403page.com/how-to-use-cloudflare-to-enable-basic-auth-on-a-subdirectory/)
-const NAME = "YOUR_USER_NAME"
-const PASS = "YOUR_PASSWOED"
+const NAME = "YOUR_USER_NAME";
+const PASS = "YOUR_PASSWORD";
 
 /**
  * RegExp for basic auth credentials
@@ -9,8 +14,7 @@ const PASS = "YOUR_PASSWOED"
  * auth-scheme = "Basic" ; case insensitive
  * token68     = 1*( ALPHA / DIGIT / "-" / "." / "_" / "~" / "+" / "/" ) *"="
  */
-
-const CREDENTIALS_REGEXP = /^ *(?:[Bb][Aa][Ss][Ii][Cc]) +([A-Za-z0-9._~+/-]+=*) *$/
+const CREDENTIALS_REGEXP = /^ *(?:[Bb][Aa][Ss][Ii][Cc]) +([A-Za-z0-9._~+/-]+=*) *$/;
 /**
  * RegExp for basic auth user/pass
  *
@@ -18,16 +22,14 @@ const CREDENTIALS_REGEXP = /^ *(?:[Bb][Aa][Ss][Ii][Cc]) +([A-Za-z0-9._~+/-]+=*) 
  * userid      = *<TEXT excluding ":">
  * password    = *TEXT
  */
-
-const USER_PASS_REGEXP = /^([^:]*):(.*)$/
+const USER_PASS_REGEXP = /^([^:]*):(.*)$/;
 
 /**
  * Object to represent user credentials.
  */
-
 const Credentials = function (this: any, name: string, pass: string): void {
-    this.name = name
-    this.pass = pass
+    this.name = name;
+    this.pass = pass;
 }
 
 
@@ -43,36 +45,40 @@ const unauthorizedResponse = function (string: string) {
 
 const parseAuthHeader = function (string: string | null) {
     if (typeof string !== 'string') {
-        return undefined
+        return false;
     }
-
     // parse header
-    const match = CREDENTIALS_REGEXP.exec(string)
-
+    const match = CREDENTIALS_REGEXP.exec(string);
     if (!match) {
-        return undefined
+        return false;
     }
-
     // decode user pass
-    const userPass = USER_PASS_REGEXP.exec(atob(match[1]))
-
+    const userPass = USER_PASS_REGEXP.exec(atob(match[1]));
     if (!userPass) {
-        return undefined
+        return false;
     }
 
     // return credentials object
-    return new (Credentials as any)(userPass[1], userPass[2])
+    return new (Credentials as any)(userPass[1], userPass[2]);
 }
 
-export default function basicAuth(event: FetchEvent) {
-    if (!event) return;
-    const credentials = parseAuthHeader(event.request.headers.get("Authorization"));
-    if(credentials === undefined) {
-        return;
-    }
-    if (!credentials || credentials.name !== NAME || credentials.pass !== PASS) {
-        return unauthorizedResponse("Unauthorized")
-    } else {
-        return fetch(event.request)
+export default function basicAuth(options: any) {
+    const path = options.path || "/";
+    const USER_NAME = options.USER_NAME || NAME;
+    const USER_PASS = options.USER_PASS || PASS;
+    return function (event: CustomFetchEvent) {
+        const requestUrl = event.$$origin ? event.$$origin.request.url : event.request.url
+        if(!_matchPath(requestUrl, path)) {
+            return;
+        }
+        const credentials = parseAuthHeader(event.request.headers.get("Authorization"));
+        if (credentials === undefined) {
+            return unauthorizedResponse("Unauthorized");
+        }
+        if (!credentials || credentials.name !== USER_NAME || credentials.pass !== USER_PASS) {
+            return unauthorizedResponse("Unauthorized")
+        } else {
+            return;
+        }
     }
 }
