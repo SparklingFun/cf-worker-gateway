@@ -143,6 +143,41 @@ app.use(robotsTxt({
 }))
 ```
 
+#### accessRateLimit
+
+An easy way to block Crazy Spiders or Malicious requests, you need a Worker KV as a jail, and some rules. For example,
+
+```javascript
+import accessRateLimit from "cf-worker-gateway/helpers/accessRateLimit";
+
+app.use(accessRateLimit({
+    rules: [
+        {
+            path: "/api/test",
+            times: 1,
+            banTime: 1000
+        }
+    ],
+    jailKVSpace: KeyValueStore
+}))
+```
+
+#### basicAuth
+
+Add HTTP Authentication to your specific path, you can use your user & password to login.
+
+For example,
+
+```javascript
+import basicAuth from "cf-worker-gateway/helpers/basicAuth";
+
+app.use(basicAuth({
+    path: "/admin",
+    USER_NAME: "YOUR_USER_NAME",
+    PASSWORD: "YOUR_PASSWORD"
+}))
+```
+
 ### deprecated
 
 > __Warning: These middlewares may effect your worker performance, obviously in async middleware mode, please use CAREFULLY.__
