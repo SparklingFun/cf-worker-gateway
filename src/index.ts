@@ -6,7 +6,7 @@ import faviconByBase64 from "./deprecated/faviconByBase64";
 import allowOption from "./helpers/allowOption";
 import robotsTxt from "./helpers/robotsTxt";
 import ipController from "./helpers/ipController";
-// import asyncGateway from "./asyncAdapter";
+import basicAuth from "./helpers/basicAuth";
 
 const Gateway = function (event: FetchEvent): Function {
     // middlewares quene
@@ -65,5 +65,6 @@ const Gateway = function (event: FetchEvent): Function {
     return app;
 }
 
-export { redirect, rewrite, faviconByBase64, allowOption, robotsTxt, ipController };
+// Only for jest testing, not recommand to use directly from index.
+export { redirect, rewrite, faviconByBase64, allowOption, robotsTxt, ipController, basicAuth };
 export default Gateway;

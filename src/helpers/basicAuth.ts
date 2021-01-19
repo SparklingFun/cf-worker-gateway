@@ -63,11 +63,13 @@ const parseAuthHeader = function (string: string | null) {
 }
 
 export default function basicAuth(options: any) {
-    const path = options.path || "/";
+    if(!options) options = {};
+    const path = options.path || "*";
     const USER_NAME = options.USER_NAME || NAME;
     const USER_PASS = options.USER_PASS || PASS;
     return function (event: CustomFetchEvent) {
-        const requestUrl = event.$$origin ? event.$$origin.request.url : event.request.url
+        const requestUrl = event.$$origin ? event.$$origin.request.url : event.request.url;
+        console.log(_matchPath(requestUrl, path));
         if(!_matchPath(requestUrl, path)) {
             return;
         }

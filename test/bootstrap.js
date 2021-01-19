@@ -17,7 +17,7 @@ addEventListener('fetch', event => {
     return event.respondWith(app.run());
 })
 `
-  const req = new Cloudworker.Request('http://127.0.0.1' + testPath, init);
+  const req = new Cloudworker.Request('http://YOUR_USER_NAME:YOUR_PASSWORD@127.0.0.1' + testPath, init);
   const cw = new Cloudworker(simpleScript, {
     bindings: {
       Event,
