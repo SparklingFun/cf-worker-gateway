@@ -1,7 +1,7 @@
 # cf-worker-gateway
 
 ![Workflow](https://github.com/SparklingFun/cf-worker-gateway/workflows/Publish/badge.svg)
-![Coverage](./coverage/badge-functions.svg)
+![Coverage](./coverage/badge-lines.svg)
 
 > Versions below `0.3.0-canary.0` and above `0.2.0-canary.0` only support SYNC middlewares, below `0.2.0-canary.0` are not in middleware mode, if you are using these versions, please read [README.old.md](https://github.com/SparklingFun/cf-worker-gateway/blob/main/README.old.md) to see reference.
 
@@ -190,7 +190,7 @@ import basicAuth from "cf-worker-gateway/helpers/basicAuth";
 app.use(basicAuth({
     path: "/admin",
     USER_NAME: "YOUR_USER_NAME",
-    PASSWORD: "YOUR_PASSWORD"
+    USER_PASS: "YOUR_PASSWORD"
 }))
 ```
 
