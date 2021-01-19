@@ -143,6 +143,21 @@ app.use(robotsTxt({
 }))
 ```
 
+#### ipController
+
+Use an IP address or range to block certain IP, full reference please see [Github-ipaddr.js](https://github.com/whitequark/ipaddr.js#readme)
+
+Code example,
+
+```javascript
+import ipController from "cf-worker-gateway/helpers/ipController";
+
+app.use(ipController({
+    deny: ['127.0.0.1'],
+    allow: ['10.1.1.0/24']
+}))
+```
+
 #### accessRateLimit
 
 An easy way to block Crazy Spiders or Malicious requests, you need a Worker KV as a jail, and some rules. For example,
