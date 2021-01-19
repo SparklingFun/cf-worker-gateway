@@ -1,6 +1,7 @@
 # cf-worker-gateway
 
 ![Workflow](https://github.com/SparklingFun/cf-worker-gateway/workflows/Publish/badge.svg)
+![Coverage](./coverage/badge-functions.svg)
 
 > Versions below `0.3.0-canary.0` and above `0.2.0-canary.0` only support SYNC middlewares, below `0.2.0-canary.0` are not in middleware mode, if you are using these versions, please read [README.old.md](https://github.com/SparklingFun/cf-worker-gateway/blob/main/README.old.md) to see reference.
 
