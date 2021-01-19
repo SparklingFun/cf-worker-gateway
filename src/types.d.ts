@@ -3,7 +3,7 @@ export interface FetchEvent extends Event {
     respondWith(response: Promise<Response> | Response): Promise<Response>;
 }
 export interface CustomFetchEvent extends FetchEvent {
-    $$origin?: Event;
+    $$origin?: FetchEvent;
 }
 
 export interface GatewayRewrite {
