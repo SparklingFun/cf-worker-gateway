@@ -6,6 +6,7 @@ import faviconByBase64 from "./deprecated/faviconByBase64";
 import allowOption from "./helpers/allowOption";
 import robotsTxt from "./helpers/robotsTxt";
 import ipController from "./helpers/ipController";
+import accessRateLimit from "./helpers/accessRateLimit";
 import basicAuth from "./helpers/basicAuth";
 
 const Gateway = function (event: FetchEvent): Function {
@@ -13,27 +14,7 @@ const Gateway = function (event: FetchEvent): Function {
     const fns: Array<Function> = [];
     // main executer
     // PS: it's a quene model, first `use`, first execute, first return when matched.
-    const app = function () {
-        // let i = 0;
-        // let modified = event;
-        // async function next(stdinEvent: FetchEvent) {
-        //     if(stdinEvent !== event && stdinEvent) {
-        //         modified = stdinEvent
-        //     };
-        //     let task = fns[i++];
-        //     if (!task) {
-        //         return;
-        //     }
-        //     let _t = task(stdinEvent || modified, next);
-        //     if(_t && _t instanceof Response) seizeResp = _t;
-        // }
-        // await next(modified);
-        // if (seizeResp && seizeResp instanceof Response) {
-        //     return seizeResp;
-        // }
-        // return modified;
-    }
-
+    const app = function () {}
     app.use = function (handler: Function): void {
         fns.push(handler);
     }
@@ -66,5 +47,5 @@ const Gateway = function (event: FetchEvent): Function {
 }
 
 // Only for jest testing, not recommand to use directly from index.
-export { redirect, rewrite, faviconByBase64, allowOption, robotsTxt, ipController, basicAuth };
+export { redirect, rewrite, faviconByBase64, allowOption, robotsTxt, ipController, accessRateLimit, basicAuth };
 export default Gateway;

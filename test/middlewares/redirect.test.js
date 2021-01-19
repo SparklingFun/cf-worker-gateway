@@ -1,21 +1,21 @@
 const bootstrap = require("../bootstrap");
 const origin = 'http://127.0.0.1';
 
-test('[Redirect] Simple Redirect', () => {
-    return bootstrap('/test2', `redirect({
+test('[Redirect] Simple Redirect', async () => {
+    const tester = bootstrap('/test2', `redirect({
         rules: [
             {
                 source: '/test2',
                 destination: '/api/test2',
             }
         ]
-    })`).then(res => {
-        expect(res.status).toBe(307);
-    })
+    })`)
+    let res = await tester.run();
+    return expect(res.status).toBe(307);
 });
 
-test('[Redirect] Permant Redirect', () => {
-    return bootstrap('/test2', `redirect({
+test('[Redirect] Permant Redirect', async () => {
+    const tester = bootstrap('/test2', `redirect({
         rules: [
             {
                 source: '/test2',
@@ -23,24 +23,24 @@ test('[Redirect] Permant Redirect', () => {
                 permanent: true
             }
         ]
-    })`).then(res => {
-        expect(res.status).toBe(308);
-    })
+    })`)
+    let res = await tester.run()
+    return expect(res.status).toBe(308);
 });
-test('[Redirect] CrossOrigin Redirect', () => {
-    return bootstrap('/test2', `redirect({
+test('[Redirect] CrossOrigin Redirect', async () => {
+    const tester = bootstrap('/test2', `redirect({
         rules: [
             {
                 source: '/test2',
                 destination: 'https://www.google.com/'
             }
         ]
-    })`).then(res => {
-        expect(res.headers.get("Location")).toBe('https://www.google.com/');
-    })
+    })`)
+    let res = await tester.run();
+    return expect(res.headers.get("Location")).toBe('https://www.google.com/');
 });
-test('[Redirect] CrossOrigin Redirect with basePath should be ignored', () => {
-    return bootstrap('/docs/test2',`redirect({
+test('[Redirect] CrossOrigin Redirect with basePath should be ignored', async () => {
+    const tester = bootstrap('/docs/test2',`redirect({
         basePath: '/docs',
         rules: [
             {
@@ -48,8 +48,8 @@ test('[Redirect] CrossOrigin Redirect with basePath should be ignored', () => {
                 destination: 'https://www.google.com/'
             }
         ]
-    })`).then(async res => {
-        const resText = await res.text();
-        expect(resText).toBe(origin + '/docs/test2');
-    })
+    })`)
+    const res = await tester.run();
+    const resText = await res.text();
+    return expect(resText).toBe(origin + '/docs/test2');
 });

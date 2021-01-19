@@ -28,11 +28,11 @@ addEventListener('fetch', (event) => {
             destination: '/api/test'
         }]
     })
-    // add your own handler at the last app.use(), such as `handleEvent` or `getAssestFromKV`
-    app.use((event) => {
-        handleRequest(event);
+    // add your own handler at the last app.use(), such as `handleEvent` or `getAssestFromKV`, using `flareact` solution as example.
+    app.use(event => {
+      return handleEvent(event, require.context("./pages/", true, /\.(js|jsx|ts|tsx)$/), DEBUG)
     })
-    
+
     event.respondWith(app.run());
 }
 ```

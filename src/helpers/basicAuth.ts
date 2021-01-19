@@ -69,7 +69,6 @@ export default function basicAuth(options: any) {
     const USER_PASS = options.USER_PASS || PASS;
     return function (event: CustomFetchEvent) {
         const requestUrl = event.$$origin ? event.$$origin.request.url : event.request.url;
-        console.log(_matchPath(requestUrl, path));
         if(!_matchPath(requestUrl, path)) {
             return;
         }
