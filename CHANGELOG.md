@@ -1,3 +1,24 @@
+## [0.3.1-canary.1](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.3.1-canary.0...v0.3.1-canary.1) (2021-01-19)
+
+
+### Bug Fixes
+
+* **ci:** fix npm script in github actions ([c5f7a8e](https://github.com/SparklingFun/cf-worker-gateway/commit/c5f7a8e29f0bd8796db07cac4d5b318b04177da8))
+* **ci:** fix npm script in github actions ([7c52fe3](https://github.com/SparklingFun/cf-worker-gateway/commit/7c52fe301077e1e92c03c1ec5d04ee6ae9f3931a))
+* **docs:** add new feat ip-controller & access-rate-limit & basic-auth ([2535c95](https://github.com/SparklingFun/cf-worker-gateway/commit/2535c9536d6329cc70b5145085a1079e66a5bab4))
+* **docs:** add new feat ip-controller & access-rate-limit & basic-auth ([1599487](https://github.com/SparklingFun/cf-worker-gateway/commit/159948709100e17482445b02a3e0c2a534045a68))
+* **docs:** fix typo at basicAuth helper ([eaca3f2](https://github.com/SparklingFun/cf-worker-gateway/commit/eaca3f27b630916838894c7765e618f7470677fd))
+* **helper:** basicAuth now can allow path array, and glob now support "globstars" ([03b5fdf](https://github.com/SparklingFun/cf-worker-gateway/commit/03b5fdf968a1c7be86583a197f2ec911072d7e3b))
+* **ignore:** fix ignore coverage files ([6bf82f4](https://github.com/SparklingFun/cf-worker-gateway/commit/6bf82f4ab9ba0ce10757b0ac629ec01a8bd3f788))
+* **test:** re-add coverage info ([2859d51](https://github.com/SparklingFun/cf-worker-gateway/commit/2859d519b258b3638ec610d9f81a951f87244a83))
+
+
+### Features
+
+* **test:** add jest-coverage badge ([971b298](https://github.com/SparklingFun/cf-worker-gateway/commit/971b298b39d776eb84598cd19aaf56703cd5c34c))
+
+
+
 ## [0.3.1-canary.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.3.0-canary.0...v0.3.1-canary.0) (2021-01-19)
 
 
