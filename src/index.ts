@@ -18,7 +18,12 @@ const Gateway = function (event: FetchEvent): Function {
     app.use = function (handler: Function): void {
         fns.push(handler);
     }
-    app.run = async function (): Promise<Response> {
+    app.run = async function (fn ?: Function): Promise<Response> {
+        if(typeof fn !== 'function') {
+            fn = function(res: Response): Response {
+                return res;
+            }
+        }
         try {
             let respond;
             let modified = event;
@@ -26,21 +31,25 @@ const Gateway = function (event: FetchEvent): Function {
                 let result = await fns[i](modified);
                 if (result instanceof Response) {
                     respond = result;
-                    return respond;
+                    break;
                 } else {
                     if (result !== undefined) {
                         modified = result;
                     }
                 }
             }
-            return new Response(null, {
-                status: 404,
-                statusText: "Not Found"
-            })
+            if(respond && respond instanceof Response) {
+                return await fn(respond)
+            } else {
+                return await fn(new Response(null, {
+                    status: 404,
+                    statusText: "Not Found"
+                }))
+            }
         } catch (e) {
-            return new Response("Worker Error: " + e.message, {
+            return await fn(new Response("Worker Error: " + e.message, {
                 status: 500
-            })
+            }))
         }
     }
     return app;

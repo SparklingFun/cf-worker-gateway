@@ -4,6 +4,7 @@
   "description": "A simple gateway for Cloudflare Worker, use before `respondWith`.",
   "main": "lib/index.js",
   "scripts": {
+    "test": "rollup -c ./rollup.config.js && jest",
     "test:coverage": "rollup -c ./rollup.config.js && jest --coverage",
     "test:badges": "npm run test:coverage  && jest-coverage-badges",
     "build": "tsc --declaration",

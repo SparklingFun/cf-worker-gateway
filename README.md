@@ -20,6 +20,7 @@ A very simple example:
 
 ```javascript
 import gateway from "cf-worker-gateway";
+import redirect from "cf-worker-gateway/lib/middlewares/redirect";
 
 addEventListener('fetch', (event) => {
     const app = new Gateway(event);
@@ -34,7 +35,15 @@ addEventListener('fetch', (event) => {
       return handleEvent(event, require.context("./pages/", true, /\.(js|jsx|ts|tsx)$/), DEBUG)
     })
 
-    event.respondWith(app.run());
+    /* The most simple way, just app.run() */
+    // event.respondWith(app.run());
+
+    /* or you can pass a callback function to modify response, even async/await function. */
+    event.respondWith(app.run(async (res) => {
+        // Your jobs that need await...
+        res.headers.set("Access-Control-Allow-Origin", "*");
+        return res;
+    }))
 }
 ```
 
