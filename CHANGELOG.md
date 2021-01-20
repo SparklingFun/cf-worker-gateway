@@ -1,3 +1,12 @@
+# [0.4.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.3.1-canary.1...v0.4.0) (2021-01-20)
+
+
+### Features
+
+* **base:** support callback sync/async functions to modify response ([1945c21](https://github.com/SparklingFun/cf-worker-gateway/commit/1945c217bb850d8f9f5b13becb44076d39f3e280))
+
+
+
 ## [0.3.1-canary.1](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.3.1-canary.0...v0.3.1-canary.1) (2021-01-19)
 
 
