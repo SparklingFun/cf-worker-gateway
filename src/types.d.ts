@@ -57,3 +57,9 @@ export interface EnvHelpers {
     Response?: Response;
     Request?: Request;
 }
+
+// 0.4.1
+export interface InterceptorOption {
+    path?: string;
+    fn: Function<Response> | Promise<Function<Response>>
+}
