@@ -1,3 +1,14 @@
+## [0.4.1-canary.1](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.4.1-canary.0...v0.4.1-canary.1) (2021-02-10)
+
+
+### Bug Fixes
+
+* **commit:** clean ([234d79a](https://github.com/SparklingFun/cf-worker-gateway/commit/234d79a40406905585a730dc2ef077a542abbb1a))
+* **interceptor:** add unit test & fix event pass ([5a5c869](https://github.com/SparklingFun/cf-worker-gateway/commit/5a5c869c4b502009a43a05ceee3839e616b4733a))
+* **interceptor:** fix mismatch bug ([5ada3d9](https://github.com/SparklingFun/cf-worker-gateway/commit/5ada3d966a36026d7bcb4f370a3521523dc2d93e))
+
+
+
 ## [0.4.2-canary.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.4.1-canary.0...v0.4.2-canary.0) (2021-02-10)
 
 
