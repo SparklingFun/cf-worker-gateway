@@ -1,3 +1,12 @@
+## [0.4.1-canary.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.4.0...v0.4.1-canary.0) (2021-02-10)
+
+
+### Features
+
+* **middlewares:** add interceptor canary ([469134a](https://github.com/SparklingFun/cf-worker-gateway/commit/469134ae82532bddc2cbe08e131980bcd5fda523))
+
+
+
 # [0.4.0](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.3.1-canary.1...v0.4.0) (2021-01-20)
 
 
