@@ -1,3 +1,12 @@
+## [0.4.1-canary.2](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.4.1-canary.1...v0.4.1-canary.2) (2021-02-25)
+
+
+### Bug Fixes
+
+* **response:** fix Worker Error: Can't modify immutable headers ([a73ede2](https://github.com/SparklingFun/cf-worker-gateway/commit/a73ede2535a1873db520a50a3c80aa8bdd993457))
+
+
+
 ## [0.4.1-canary.1](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.4.1-canary.0...v0.4.1-canary.1) (2021-02-10)
 
 
