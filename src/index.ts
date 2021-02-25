@@ -40,6 +40,8 @@ const Gateway = function (event: FetchEvent): Function {
                 }
             }
             if(respond && respond instanceof Response) {
+                // fix: Worker Error: Can't modify immutable headers. => Create a new response.
+                respond = new Response(respond.body, respond);
                 return await fn(respond)
             } else {
                 return await fn(new Response(null, {
