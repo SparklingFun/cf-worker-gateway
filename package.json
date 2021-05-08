@@ -1,7 +1,7 @@
 {
-  "name": "cf-worker-gateway",
+  "name": "@arctome/worker-scaffold",
   "version": "0.4.1-canary.2",
-  "description": "A simple gateway for Cloudflare Worker, use before `respondWith`.",
+  "description": "Like scaffold for workers, this framework is designed for developers use Cloudflare Worker to build their Serverless Web Application.",
   "main": "lib/index.js",
   "scripts": {
     "test": "rollup -c ./rollup.config.js && jest",
@@ -15,10 +15,10 @@
     "gateway",
     "Worker"
   ],
-  "author": "SparklingFun",
+  "author": "Arcto <sparkinglemon@foxmail.com>",
   "license": "MIT",
   "repository": {
-    "url": "https://github.com/SparklingFun/cf-worker-gateway"
+    "url": "https://github.com/arctome/worker-scaffold"
   },
   "dependencies": {
     "glob-to-regexp": "^0.4.1",
