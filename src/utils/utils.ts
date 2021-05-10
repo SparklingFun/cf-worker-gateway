@@ -1,4 +1,4 @@
-import globToRegExp from "glob-to-regexp";
+// import globToRegExp from "glob-to-regexp";
 import { CustomFetchEvent } from "../types";
 
 export function _matchPath(urlString: string, target: string): Boolean {
@@ -9,8 +9,9 @@ export function _matchPath(urlString: string, target: string): Boolean {
         console.log("[Gateway Error] Request URL '" + urlString + "': Invalid URL.");
         return false;
     }
-    let re = globToRegExp(target, {globstar: true});
-    return re.test(url.pathname);
+    // let re = globToRegExp(target, {globstar: true});
+    // return re.test(url.pathname);
+    return true;
 }
 
 export function _modifyEvent(event: FetchEvent | CustomFetchEvent, modifiedReq: Object): FetchEvent {

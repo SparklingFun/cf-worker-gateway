@@ -1,4 +1,7 @@
 import { FetchEvent } from "./types";
+// const { match } = require("path-to-regexp");
+import * as PathToRegexp from "path-to-regexp";
+const { match } = PathToRegexp;
 // imported but not used, only for jest test.
 import redirect from "./middlewares/redirect";
 import rewrite from "./middlewares/rewrite";
@@ -16,8 +19,16 @@ const Gateway = function (event: FetchEvent): Function {
     // main executer
     // PS: it's a quene model, first `use`, first execute, first return when matched.
     const app = function () {}
-    app.use = function (handler: Function): void {
-        fns.push(handler);
+    app.use = function (path: string, handler: Function): void {
+        if(typeof path === "function" && typeof handler === "undefined") {
+            handler = path;
+            path = "/";
+        }
+
+        const isMatched = (path: string) => match(path, { encode: encodeURI, decode: decodeURIComponent });
+        if(isMatched(path)) {
+            fns.push(handler);
+        }
     }
     app.run = async function (fn ?: Function): Promise<Response> {
         if(typeof fn !== 'function') {

@@ -1,5 +1,5 @@
 // @ts-ignore
-import ipaddr from "ipaddr.js";
+// import ipaddr from "ipaddr.js";
 import { cfRealIp } from "../utils/utils";
 
 export interface ipControllerOption {
@@ -27,7 +27,8 @@ export default function ipController(option: any) {
             // @ts-ignore
             let matched = option.allow.find(ip => {
                 // adjust to ip range
-                return ip === realIP || ipaddr.parse(realIP).match(ipaddr.parseCIDR(ip))
+                // return ip === realIP || ipaddr.parse(realIP).match(ipaddr.parseCIDR(ip))
+                return true;
             });
             if(!matched) {
                 return new Response("", {
@@ -40,7 +41,8 @@ export default function ipController(option: any) {
             // @ts-ignore
             let matched = option.deny.find(ip => {
                 // adjust to ip range
-                return ip === realIP || ipaddr.parse(realIP).match(ipaddr.parseCIDR(ip))
+                // return ip === realIP || ipaddr.parse(realIP).match(ipaddr.parseCIDR(ip))
+                return true;
             });
             if(matched) {
                 return new Response("", {
