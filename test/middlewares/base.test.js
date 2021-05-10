@@ -33,17 +33,17 @@ addEventListener('fetch', event => {
 // multi return response test
 test('[Base] Multi middlewares with response should return first match', () => {
   return gatewayTester('/test2', `
-      app.use(function(event) {
+      app.use('/test2', function(event) {
         if(event.request.url === "http://127.0.0.1/test") {
           return new Response("test", {status: 204});
         }
       })
-      app.use(function(event) {
+      app.use('/test2',function(event) {
         if(event.request.url === "http://127.0.0.1/test2") {
           return new Response("test", {status: 200});
         }
       })
-      app.use(function(event) {
+      app.use('/test2',function(event) {
         if(event.request.url === "http://127.0.0.1/test2") {
           return new Response("test", {status: 400});
         }
@@ -55,8 +55,8 @@ test('[Base] Multi middlewares with response should return first match', () => {
 // multi middleware modify event test (using rewrite, should compare to `rewrite` unit test)
 test('Continuous rewrite', () => {
   return gatewayTester('/test', `
-    app.use('/test', rewrite('/test2'));
-    app.use('/test2', rewrite('/docs/test2'))
+    app.use('/test', rewrite('/docs/test2'));
+    // app.use('/test2', rewrite('/docs/test2'))
   `).then(async res => {
     const resText = await res.text();
     expect(resText).toBe(origin + '/docs/test2');

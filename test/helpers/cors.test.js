@@ -1,7 +1,7 @@
 const bootstrap = require("../bootstrap");
 
 test('[Helpers] Allow OPTIONS request', async () => {
-    const tester = bootstrap("/test2", "/", "cors({'test': '1'})", {
+    const tester = bootstrap("/test2", "/test2", "cors({'test': '1'})", {
         method: 'OPTIONS'
     })
     let res = await tester.run();

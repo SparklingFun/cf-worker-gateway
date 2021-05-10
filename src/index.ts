@@ -16,14 +16,18 @@ const WorkerScaffold = function (event: FetchEvent, isDev: boolean=false): Funct
     // main executer
     // PS: it's a quene model, first `use`, first execute, first return when matched.
     const app = function () {}
-    app.use = function (path: string, handler: Function|Object): void {
-        if(typeof path === "function" && typeof handler === "undefined") {
+    app.use = function (path: string|undefined, handler: Function|Object): void {
+        if((typeof path === "function" || typeof path === "object") && typeof handler === "undefined") {
             handler = path;
-            path = "/";
+            path = undefined;
         }
 
-        const isMatched = (path: string) => match(path, { encode: encodeURI, decode: decodeURIComponent });
-        if(isMatched(path)) {
+        const isMatched = match(path || "", { encode: encodeURI, decode: decodeURIComponent });
+        let matchResult: boolean|Object = false;
+        try {
+            matchResult = isMatched(new URL(event.request.url).pathname);
+        } catch(e) {}
+        if(path === undefined || matchResult) {
             fns.push(handler);
         }
     }
@@ -50,8 +54,6 @@ const WorkerScaffold = function (event: FetchEvent, isDev: boolean=false): Funct
             }
             if(!respond || !(respond instanceof Response)) respond = new Response(null, {status: 404})
             for (let i = 0; i < fns.length; i++) {
-                // @ts-ignore
-                // console.log(fns[i].callback);
                 // @ts-ignore
                 if(fns[i].callback && typeof fns[i].callback === "function") {
                     // @ts-ignore
