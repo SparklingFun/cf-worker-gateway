@@ -9,7 +9,7 @@ function gatewayTester(testPath = '/test2', middlewaresCode) {
 ${code.toString().replace(/export [\s\S]*;/g, '')}
 
 addEventListener('fetch', event => {
-    const app = new Gateway(event);
+    const app = new WorkerScaffold(event);
     
     ${middlewaresCode || ''}
 

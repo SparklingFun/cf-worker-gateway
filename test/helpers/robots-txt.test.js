@@ -18,7 +18,7 @@ const bootstrap = require("../bootstrap");
 // }
 
 test('robotsHandler return all allow', async () => {
-    const tester = bootstrap('/robots.txt', `robotsTxt({
+    const tester = bootstrap('/robots.txt', '/robots.txt', `robotsTxt({
         rules: [
             {
                 userAgent: "*",
@@ -33,7 +33,7 @@ Allow: /`);
 });
 
 test('robotsHandler return all disallow', async () => {
-    const tester = bootstrap('/robots.txt', `robotsTxt({
+    const tester = bootstrap('/robots.txt', '/robots.txt', `robotsTxt({
         rules: [
             {
                 userAgent: "*",
@@ -48,7 +48,7 @@ Disallow: /`);
 });
 
 test('robotsHandler return allow & disallow both', async () => {
-    const tester = bootstrap('/robots.txt', `robotsTxt({
+    const tester = bootstrap('/robots.txt', '/robots.txt', `robotsTxt({
         rules: [
             {
                 userAgent: "*",
@@ -66,7 +66,7 @@ Disallow: /`);
 });
 
 test('robotsHandler multi User-agent', async () => {
-    const tester = bootstrap('/robots.txt', `robotsTxt({
+    const tester = bootstrap('/robots.txt', '/robots.txt', `robotsTxt({
         rules: [
             {
                 userAgent: "GoogleBot",
@@ -87,7 +87,7 @@ Disallow: /google-only`);
 });
 
 test('robotsHandler multi User-agent with sitemap', async () => {
-    const tester = bootstrap('/robots.txt', `robotsTxt({
+    const tester = bootstrap('/robots.txt', '/robots.txt', `robotsTxt({
         rules: [
             {
                 userAgent: "GoogleBot",

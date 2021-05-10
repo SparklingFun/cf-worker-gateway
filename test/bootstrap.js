@@ -9,7 +9,7 @@ function gatewayTester(testPath = '/test2', pathToRegexp, functionCode, init = {
 ${code.toString().replace(/export [\s\S]*;/g, '')}
 
 addEventListener('fetch', event => {
-    const app = new Gateway(event);
+    const app = new WorkerScaffold(event, true);
     app.use("${pathToRegexp}", ${functionCode});
     app.use((event) => {
       return new Response(event.request.url, {status: 200})
