@@ -5,7 +5,6 @@ const { match } = PathToRegexp;
 // imported but not used, only for jest test.
 import redirect from "./middlewares/redirect";
 import rewrite from "./middlewares/rewrite";
-import interceptor from "./middlewares/interceptor";
 import faviconByBase64 from "./deprecated/faviconByBase64";
 import allowOption from "./helpers/allowOption";
 import robotsTxt from "./helpers/robotsTxt";
@@ -70,5 +69,5 @@ const Gateway = function (event: FetchEvent): Function {
 }
 
 // Only for jest testing, not recommand to use directly from index.
-export { redirect, rewrite, faviconByBase64, allowOption, robotsTxt, ipController, accessRateLimit, basicAuth, interceptor };
+export { redirect, rewrite, faviconByBase64, allowOption, robotsTxt, ipController, accessRateLimit, basicAuth };
 export default Gateway;

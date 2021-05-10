@@ -38,20 +38,21 @@ import { GatewayRewrite, FetchEvent } from "../types";
 const rewrite = function (path: string) {
     return function (event: FetchEvent) {
         if (!path) return;
-        let oldReq = event.request.clone();
+        let oldReq = event.request;
         let redirectedUrl;
         try {
             let tmp = new URL(path);
             redirectedUrl = tmp;
         } catch(e) {
-            let reqUrl = new URL(event.request.url);
+            let reqUrl = new URL(oldReq.url);
             let tmp = new URL(reqUrl.protocol + '//' + reqUrl.host + path);
             redirectedUrl = tmp;
             // if not correct, throw error.
         }
         let rewritedReq = new Event("fetch");
+        let newReq = Object.assign({}, rewritedReq, {url: redirectedUrl.href});
         // @ts-ignore
-        rewritedReq.request = { ...oldReq, url: redirectedUrl.href };
+        rewritedReq.request = newReq;
         return rewritedReq;
     }
 }

@@ -19,7 +19,7 @@ addEventListener('fetch', event => {
     
     return event.respondWith(app.run(async (res) => {
       res.headers.set("Access-Control-Allow-Origin", "*");
-      const anotherRes = await fetch("https://api.github.com/users/SparklingFun");
+      const anotherRes = await fetch("https://api.github.com/users/arctome");
       const anotherResJSON = await anotherRes.json();
       res.headers.set("Test-Await-Success", anotherResJSON.id);
       return res;
