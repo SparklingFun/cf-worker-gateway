@@ -53,6 +53,7 @@ const WorkerScaffold = function (event: FetchEvent, isDev: boolean=false): Funct
             let respond;
             let modified = event;
             for (let i = 0; i < fns.length; i++) {
+                // An Typescript issue which needs an ignore, same below {@link https://github.com/microsoft/TypeScript/issues/37663}
                 // @ts-ignore
                 let result = typeof fns[i] === "function" ? await fns[i](modified) : await fns[i].default(modified);
                 if (result instanceof Response) {
