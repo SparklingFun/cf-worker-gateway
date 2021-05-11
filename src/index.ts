@@ -45,6 +45,36 @@ const WorkerScaffold = function (event: FetchEvent, isDev: boolean=false): Funct
         }
     }
     /**
+     * A bundle of alias functions of `app.use`
+     * @returns app.use function
+     */
+    app.get = function (path: string|undefined, handler?: Function|MiddlewareHandlerBundle): void|Function {
+        if(event.request.method.toLowerCase() !== "get") return;
+        return app.use(path, handler);
+    }
+    app.post = function (path: string|undefined, handler?: Function|MiddlewareHandlerBundle): void|Function {
+        if(event.request.method.toLowerCase() !== "post") return;
+        return app.use(path, handler);
+    }
+    app.head = function (path: string|undefined, handler?: Function|MiddlewareHandlerBundle): void|Function {
+        if(event.request.method.toLowerCase() !== "head") return;
+        return app.use(path, handler);
+    }
+    app.put = function (path: string|undefined, handler?: Function|MiddlewareHandlerBundle): void|Function {
+        if(event.request.method.toLowerCase() !== "put") return;
+        return app.use(path, handler);
+    }
+    app.delete = function (path: string|undefined, handler?: Function|MiddlewareHandlerBundle): void|Function {
+        if(event.request.method.toLowerCase() !== "delete") return;
+        return app.use(path, handler);
+    }
+    app.options = function (path: string|undefined, handler?: Function|MiddlewareHandlerBundle): void|Function {
+        if(event.request.method.toLowerCase() !== "options") return;
+        return app.use(path, handler);
+    }
+
+
+    /**
      * Generate response for `event.respondWith`
      * @returns Expected response which is generated through multiple middlewares
      */
