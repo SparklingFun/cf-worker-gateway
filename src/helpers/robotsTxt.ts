@@ -1,6 +1,20 @@
-import { RobotsConfig } from "../types";
+// helpers
+interface RobotsConfig {
+    rules?: Array<RobotsConfigRule>;
+    sitemapUrl?: Array<string>;
+}
+interface RobotsConfigRule {
+    userAgent?: string;
+    allow?: Array<string>;
+    disallow?: Array<string>;
+    crawlDelay?: number;
+}
 
-// [Reference](https://www.cloudflare.com/zh-cn/learning/bots/what-is-robots.txt)
+/**
+ * Helpers - robotsTxt
+ * @param option `robots.txt` Configuration, also see {@link https://www.cloudflare.com/zh-cn/learning/bots/what-is-robots.txt}
+ * @returns Middleware handler
+ */
 export default function robotsTxt (option: RobotsConfig): Function {
     return function (event: FetchEvent): Response | undefined {
         if (!(new URL(event.request.url).pathname.endsWith('/robots.txt'))) {

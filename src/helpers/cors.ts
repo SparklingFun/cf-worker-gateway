@@ -29,8 +29,7 @@ function isOriginAllowed(
   }
 }
 
-// inject custom headers for CORS
-const headers: any = {};
+// inject custom header functions for CORS
 function configureOrigin(event: FetchEvent, options: CORSOption) {
   let requestOrigin = event.request.headers.get("Origin") || "",
     isAllowed;
@@ -101,6 +100,11 @@ function configureCredentials(options: CORSOption) {
   }
 }
 
+/**
+ * Helpers - CORS
+ * @param options options for CORS config, same as `cors` npm package ({@link https://github.com/expressjs/cors})
+ * @returns Middleware bundle of handlers (default & callback)
+ */
 const cors = function (
   options: boolean | CORSOption = {
     origin: "*",

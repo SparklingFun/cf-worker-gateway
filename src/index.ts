@@ -1,4 +1,3 @@
-import { FetchEvent } from "./types";
 import * as PathToRegexp from "path-to-regexp";
 // imported but not used, only for jest test & convient import.
 import redirect from "./middlewares/redirect";
@@ -8,15 +7,29 @@ import cors from "./helpers/cors";
 import robotsTxt from "./helpers/robotsTxt";
 import basicAuth from "./helpers/basicAuth";
 
+interface FetchEvent extends Event {
+    request: Request;
+    respondWith(response: Promise<Response> | Response): Promise<Response>;
+}
+interface MiddlewareHandlerBundle {
+    default: Function|Promise<Function>
+    callback?: Function|Promise<Function>
+}
+
 const { match } = PathToRegexp;
 
 const WorkerScaffold = function (event: FetchEvent, isDev: boolean=false): Function {
     // middlewares quene
-    const fns: Array<Function|Object> = [];
-    // main executer
-    // PS: it's a quene model, first `use`, first execute, first return when matched.
+    const fns: Array<Function|Promise<Function>|MiddlewareHandlerBundle> = [];
+    // main executer (it's a quene model, first `use`, first execute, first return when matched)
     const app = function () {}
-    app.use = function (path: string|undefined, handler: Function|Object): void {
+
+    /**
+     * Declare middleware handler and its path, handlers will automatically execute in serial.
+     * @param path Matched path for URL, see also {@link https://github.com/pillarjs/path-to-regexp}
+     * @param handler Middleware handler function or object which contains `default` & `callback`
+     */
+    app.use = function (path: string|undefined, handler?: Function|MiddlewareHandlerBundle): void {
         if((typeof path === "function" || typeof path === "object") && typeof handler === "undefined") {
             handler = path;
             path = undefined;
@@ -27,16 +40,15 @@ const WorkerScaffold = function (event: FetchEvent, isDev: boolean=false): Funct
         try {
             matchResult = isMatched(new URL(event.request.url).pathname);
         } catch(e) {}
-        if(path === undefined || matchResult) {
+        if((path === undefined || matchResult) && handler) {
             fns.push(handler);
         }
     }
+    /**
+     * Generate response for `event.respondWith`
+     * @returns Expected response which is generated through multiple middlewares
+     */
     app.run = async function (): Promise<Response> {
-        // if(typeof fn !== 'function') {
-        //     fn = function(res: Response): Response {
-        //         return res;
-        //     }
-        // }
         try {
             let respond;
             let modified = event;
@@ -61,17 +73,6 @@ const WorkerScaffold = function (event: FetchEvent, isDev: boolean=false): Funct
                 }
             }
             return respond;
-
-            // if(respond && respond instanceof Response) {
-            //     // fix: Worker Error: Can't modify immutable headers. => Create a new response.
-            //     respond = new Response(respond.body, respond);
-            //     return await fn(respond)
-            // } else {
-            //     return await fn(new Response(null, {
-            //         status: 404,
-            //         statusText: "Not Found"
-            //     }))
-            // }
         } catch (e) {
             if(isDev) return new Response("Worker Error: " + e.message, {
                 status: 500
