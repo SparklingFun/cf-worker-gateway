@@ -7,7 +7,7 @@
 
 ## How it works
 
-![How it works]("https://lucid.app/publicSegments/view/74a1b7f0-b008-430f-8f3b-25c6831ae2c9/image.jpeg")
+![How it works](https://lucid.app/publicSegments/view/74a1b7f0-b008-430f-8f3b-25c6831ae2c9/image.jpeg)
 
 ## Quick Start
 
