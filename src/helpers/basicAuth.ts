@@ -1,9 +1,4 @@
 // Reference: [MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication)
-
-import { _matchPath } from "../utils/utils";
-import { CustomFetchEvent } from "../types";
-
-// inspired from [This Link](https://403page.com/how-to-use-cloudflare-to-enable-basic-auth-on-a-subdirectory/)
 const NAME = "YOUR_USER_NAME";
 const PASS = "YOUR_PASSWORD";
 
@@ -62,20 +57,22 @@ const parseAuthHeader = function (string: string | null) {
     return new (Credentials as any)(userPass[1], userPass[2]);
 }
 
-export default function basicAuth(options: any) {
+interface basicAuthOption {
+    USER_NAME?: string
+    USER_PASS?: string
+}
+
+/**
+ * Helpers - basicAuth (Thanks for [@dommmel](https://github.com/dommmel) & [@JonasJasas](https://github.com/JonasJasas) work!)
+ * @link https://403page.com/how-to-use-cloudflare-to-enable-basic-auth-on-a-subdirectory/
+ * @param options User name & password configuration
+ * @returns Middleware handler
+ */
+export default function basicAuth(options: basicAuthOption) {
     if(!options) options = {};
-    let path = options.path || "/*";
     const USER_NAME = options.USER_NAME || NAME;
     const USER_PASS = options.USER_PASS || PASS;
-    return function (event: CustomFetchEvent) {
-        const requestUrl = event.$$origin ? event.$$origin.request.url : event.request.url;
-        if(typeof path === "string") {
-            path = [path]
-        }
-        const matched = path.find((item: string) => _matchPath(requestUrl, item))
-        if(!matched) {
-            return;
-        }
+    return function (event: FetchEvent) {
         const credentials = parseAuthHeader(event.request.headers.get("Authorization"));
         if (credentials === undefined) {
             return unauthorizedResponse("Unauthorized");

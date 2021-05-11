@@ -1,24 +1,7 @@
 const bootstrap = require("../bootstrap");
 
-// function robotsHandlerTester(options) {
-//   const simpleScript = `
-// const robotsHandler = ${robotsHandler};
-// addEventListener('fetch', event => {
-//   let res = robotsHandler(event, ${JSON.stringify(options)})
-//   event.respondWith(res || new Response('hello', {status: 200}));
-// })
-// `
-//   const req = new Cloudworker.Request('http://127.0.0.1/robots.txt');
-//   const cw = new Cloudworker(simpleScript, {
-//     bindings: {
-//       robotsHandler
-//     }
-//   })
-//   return cw.dispatch(req)
-// }
-
 test('robotsHandler return all allow', async () => {
-    const tester = bootstrap('/robots.txt', `robotsTxt({
+    const tester = bootstrap('/robots.txt', '/robots.txt', `robotsTxt({
         rules: [
             {
                 userAgent: "*",
@@ -33,7 +16,7 @@ Allow: /`);
 });
 
 test('robotsHandler return all disallow', async () => {
-    const tester = bootstrap('/robots.txt', `robotsTxt({
+    const tester = bootstrap('/robots.txt', '/robots.txt', `robotsTxt({
         rules: [
             {
                 userAgent: "*",
@@ -48,7 +31,7 @@ Disallow: /`);
 });
 
 test('robotsHandler return allow & disallow both', async () => {
-    const tester = bootstrap('/robots.txt', `robotsTxt({
+    const tester = bootstrap('/robots.txt', '/robots.txt', `robotsTxt({
         rules: [
             {
                 userAgent: "*",
@@ -66,7 +49,7 @@ Disallow: /`);
 });
 
 test('robotsHandler multi User-agent', async () => {
-    const tester = bootstrap('/robots.txt', `robotsTxt({
+    const tester = bootstrap('/robots.txt', '/robots.txt', `robotsTxt({
         rules: [
             {
                 userAgent: "GoogleBot",
@@ -87,7 +70,7 @@ Disallow: /google-only`);
 });
 
 test('robotsHandler multi User-agent with sitemap', async () => {
-    const tester = bootstrap('/robots.txt', `robotsTxt({
+    const tester = bootstrap('/robots.txt', '/robots.txt', `robotsTxt({
         rules: [
             {
                 userAgent: "GoogleBot",

@@ -1,57 +1,54 @@
-# cf-worker-gateway
+# @arctome/worker-scaffold
 
-![Workflow](https://github.com/SparklingFun/cf-worker-gateway/workflows/Publish/badge.svg)
+![Workflow](https://github.com/arctome/worker-scaffold/workflows/Publish/badge.svg)
 ![Coverage](./coverage/badge-lines.svg)
 
-> Versions below `0.3.0-canary.0` and above `0.2.0-canary.0` only support SYNC middlewares, below `0.2.0-canary.0` are not in middleware mode, if you are using these versions, please read [README.old.md](https://github.com/SparklingFun/cf-worker-gateway/blob/main/README.old.md) to see reference.
+> Package `cf-worker-gateway` is the temp name of this package, since v1.0.0, core function & middlewares has been refactored. If you are using `cf-worker-gateway` under v0.4.1-cananry2, please see [README.old.md](./README.old.md)
 
-## Usage
+## How it works
 
-Pre-handle requests that worker receive, get directly response or modify event, original event will be passed if no middleware is used and matched.
+![How it works](https://lucid.app/publicSegments/view/74a1b7f0-b008-430f-8f3b-25c6831ae2c9/image.jpeg)
 
 ## Quick Start
 
 ```bash
-npm install cf-worker-gateway@0.3.0-canary.0 --save
-# yarn add cf-worker-gateway@0.3.0-canary.0
+npm install @arctome/worker-scaffold --save
+# yarn add @arctome/worker-scaffold
 ```
 
 A very simple example:
 
 ```javascript
-import gateway from "cf-worker-gateway";
-import redirect from "cf-worker-gateway/lib/middlewares/redirect";
+import gateway from "@arctome/worker-scaffold";
+import redirect from "@arctome/worker-scaffold/lib/middlewares/redirect";
 
 addEventListener('fetch', (event) => {
-    const app = new Gateway(event);
-    app.use(redirect{
-        rules: [{
-            source: '/test',
-            destination: '/api/test'
-        }]
-    })
-    // add your own handler at the last app.use(), such as `handleEvent` or `getAssestFromKV`, using `flareact` solution as example.
+    const app = new WorkerScaffold(event);
+    // call `app.use` with exact route, the handler will be pushed in quene.
+    app.use('/test', redirect('/api/test'))
+    // add your own handler at the last app.use(), such as `handleEvent` or `getAssestFromKV`.
+    // if not `path` specified, handler will be inject in any route.
     app.use(event => {
-      return handleEvent(event, require.context("./pages/", true, /\.(js|jsx|ts|tsx)$/), DEBUG)
+      return new Response("Hello", {status: 200})
+    })
+    // if you need a handler when response is generated but not sent, you can pass a bundle of functions contains `default` & `callback`. `callback` funciton will be called at the end.
+    app.use({
+        default: function() {},
+        callback: async function(event, response) {
+            // Your jobs that need await...
+            res.headers.set("Access-Control-Allow-Origin", "*");
+            return res;
+        }
     })
 
-    /* The most simple way, just app.run() */
-    // event.respondWith(app.run());
-
-    /* or you can pass a callback function to modify response, even async/await function. */
-    event.respondWith(app.run(async (res) => {
-        // Your jobs that need await...
-        res.headers.set("Access-Control-Allow-Origin", "*");
-        return res;
-    }))
+    // pass `app.run()` to `event.respondWith`, all things done.
+    event.respondWith(app.run())
 }
 ```
 
 ## Middleware
 
-When `cf-worker-gateway` was create, it contains a plenty of configure options and functions, which are not organized well. This is the reason why "middleware" design was applied since 0.2.0 (canary versions). Different middlewares for different usage, can be easily import from package. Or you can easily make your own middleware just follow the guide below.
-
-> Async middlewares are supported from `0.3.0-canary.0`, please take care!
+Inspired from express.js, I want to create an easy scaffold for routing and middleware interception, so `worker-scaffold` here !
 
 A simple guide for creating a new middleware:
 
@@ -83,18 +80,9 @@ function customizedMiddleware(option) { // if you need pass some options, a wrap
 Full option,
 
 ```javascript
-import redirect from "cf-worker-gateway/middlewares/redirect";
-
-app.use(redirect({
-    basePath: "",
-    rules: [
-        {
-            source: "event request path",
-            destination: "redirected url or path",
-            permanent: true // HTTP Code 308 or 307
-        }
-    ]
-}))
+import redirect from "@arctome/worker-scaffold/middlewares/redirect";
+// pass true in second params will make a HTTP code 308 redirect.
+app.use("/test", redirect("/docs/test", true))
 ```
 
 A `Response.redirect` will return when matched.
@@ -104,31 +92,23 @@ A `Response.redirect` will return when matched.
 Full option,
 
 ```javascript
-import rewrite from "cf-worker-gateway/middlewares/rewrite";
+import rewrite from "@arctome/worker-scaffold/middlewares/rewrite";
 
-app.use(rewrite({
-    basePath: "",
-    rules: [
-        {
-            source: "event request url or path",
-            destination: "redirected url or path"
-        }
-    ]
-}))
+app.use("/test", rewrite("/docs/test"))
 ```
 
 ### helpers
 
-#### allowOption
+#### cors
 
 When received CORS request, you may need a middleware to handle all `OPTION` request.
 
-Example is so simple,
+Example is so simple, you can pass configurations as [express.js - cors](https://github.com/expressjs/cors)
 
 ```javascript
-import allowOption from "cf-worker-gateway/helpers/allowOption";
-
-app.use(allowOption())
+import cors from "@arctome/worker-scaffold/helpers/cors";
+// Configurations see also {@link https://github.com/expressjs/cors}
+app.use(cors())
 ```
 
 #### robotsTxt
@@ -136,7 +116,7 @@ app.use(allowOption())
 It's a middleware that receive all request ends with `robots.txt`, you can configure it with options below:
 
 ```javascript
-import robotsTxt from "cf-worker-gateway/helpers/robotsTxt";
+import robotsTxt from "@arctome/worker-scaffold/helpers/robotsTxt";
 
 app.use(robotsTxt({
     rules: [
@@ -153,40 +133,6 @@ app.use(robotsTxt({
 }))
 ```
 
-#### ipController
-
-Use an IP address or range to block certain IP, full reference please see [Github-ipaddr.js](https://github.com/whitequark/ipaddr.js#readme)
-
-Code example,
-
-```javascript
-import ipController from "cf-worker-gateway/helpers/ipController";
-
-app.use(ipController({
-    deny: ['127.0.0.1'],
-    allow: ['10.1.1.0/24']
-}))
-```
-
-#### accessRateLimit
-
-An easy way to block Crazy Spiders or Malicious requests, you need a Worker KV as a jail, and some rules. For example,
-
-```javascript
-import accessRateLimit from "cf-worker-gateway/helpers/accessRateLimit";
-
-app.use(accessRateLimit({
-    rules: [
-        {
-            path: "/api/test",
-            times: 1,
-            banTime: 1000
-        }
-    ],
-    jailKVSpace: KeyValueStore
-}))
-```
-
 #### basicAuth
 
 Add HTTP Authentication to your specific path, you can use your user & password to login.
@@ -194,10 +140,9 @@ Add HTTP Authentication to your specific path, you can use your user & password 
 For example,
 
 ```javascript
-import basicAuth from "cf-worker-gateway/helpers/basicAuth";
+import basicAuth from "@arctome/worker-scaffold/helpers/basicAuth";
 
-app.use(basicAuth({
-    path: "/admin", // You can also use an array, like `["/admin", "/admin/**"]` to specify multi path.
+app.use("/admin", basicAuth({
     USER_NAME: "YOUR_USER_NAME",
     USER_PASS: "YOUR_PASSWORD"
 }))
@@ -212,7 +157,7 @@ app.use(basicAuth({
 You can config a `favicon.ico` by using this middleware, which uses `Buffer` from javascript, may cause a high CPU time when requests received, but it can solve your 500 code.
 
 ```javascript
-import faviconByBase64 from "cf-worker-gateway/deprecated/faviconByBase64";
+import faviconByBase64 from "@arctome/worker-scaffold/deprecated/faviconByBase64";
 
 app.use(faviconByBase64("ignored" | "some-base64-text"));
 ```

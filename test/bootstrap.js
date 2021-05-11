@@ -4,13 +4,13 @@ const code = fs.readFileSync(process.cwd() + "/dist/index.js");
 const KeyValueStore = require("@dollarshaveclub/cloudworker/lib/kv").KeyValueStore;
 const Request = require("@dollarshaveclub/cloudworker/lib/runtime").Request;
 
-function gatewayTester(testPath = '/test2', functionCode, init = { method: 'GET' }) {
+function gatewayTester(testPath = '/test2', pathToRegexp, functionCode, init = { method: 'GET' }) {
   const simpleScript = `
 ${code.toString().replace(/export [\s\S]*;/g, '')}
 
 addEventListener('fetch', event => {
-    const app = new Gateway(event);
-    app.use(${functionCode});
+    const app = new WorkerScaffold(event, true);
+    app.use("${pathToRegexp}", ${functionCode});
     app.use((event) => {
       return new Response(event.request.url, {status: 200})
     });

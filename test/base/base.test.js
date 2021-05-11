@@ -9,7 +9,7 @@ function gatewayTester(testPath = '/test2', middlewaresCode) {
 ${code.toString().replace(/export [\s\S]*;/g, '')}
 
 addEventListener('fetch', event => {
-    const app = new Gateway(event);
+    const app = new WorkerScaffold(event);
     
     ${middlewaresCode || ''}
 
@@ -33,47 +33,22 @@ addEventListener('fetch', event => {
 // multi return response test
 test('[Base] Multi middlewares with response should return first match', () => {
   return gatewayTester('/test2', `
-      app.use(function(event) {
+      app.use('/test2', function(event) {
         if(event.request.url === "http://127.0.0.1/test") {
           return new Response("test", {status: 204});
         }
       })
-      app.use(function(event) {
+      app.use('/test2',function(event) {
         if(event.request.url === "http://127.0.0.1/test2") {
           return new Response("test", {status: 200});
         }
       })
-      app.use(function(event) {
+      app.use('/test2',function(event) {
         if(event.request.url === "http://127.0.0.1/test2") {
           return new Response("test", {status: 400});
         }
       })
     `).then(res => {
     expect(res.status).toBe(200);
-  })
-});
-
-// multi middleware modify event test (using rewrite, should compare to `rewrite` unit test)
-test('[Base] Middlewares which modify event should return all modification', () => {
-  return gatewayTester('/test', `
-    app.use(rewrite({
-      rules: [
-        {
-          source: '/test',
-          destination: '/test2',
-        }
-      ]
-    }))
-    app.use(rewrite({
-      rules: [
-        {
-          source: '/test2',
-          destination: '/docs/test2',
-        }
-      ]
-    }))
-  `).then(async res => {
-    const resText = await res.text();
-    expect(resText).toBe(origin + '/docs/test2');
   })
 });
