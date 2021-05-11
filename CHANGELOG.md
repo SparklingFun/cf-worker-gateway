@@ -1,3 +1,12 @@
+# [2.0.0-0](https://github.com/arctome/worker-scaffold/compare/v1.0.0-0...v2.0.0-0) (2021-05-11)
+
+
+### Bug Fixes
+
+* fix github action for publish & modify package.json keyword ([a91344d](https://github.com/arctome/worker-scaffold/commit/a91344db084cff807f1e9845d135d67207f254c9))
+
+
+
 # [1.0.0-0](https://github.com/arctome/worker-scaffold/compare/v0.4.1-canary.2...v1.0.0-0) (2021-05-11)
 
 
