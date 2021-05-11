@@ -1,3 +1,7 @@
+# [1.0.0-0](https://github.com/arctome/worker-scaffold/compare/v0.4.1-canary.2...v1.0.0-0) (2021-05-11)
+
+
+
 ## [0.4.1-canary.2](https://github.com/SparklingFun/cf-worker-gateway/compare/v0.4.1-canary.1...v0.4.1-canary.2) (2021-02-25)
 
 
