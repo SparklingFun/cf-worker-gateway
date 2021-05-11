@@ -1,6 +1,6 @@
 {
   "name": "@arctome/worker-scaffold",
-  "version": "1.0.0-0",
+  "version": "1.0.0-canary.0",
   "description": "Like scaffold for workers, this framework is designed for developers use Cloudflare Worker to build their Serverless Web Application.",
   "main": "lib/index.js",
   "scripts": {

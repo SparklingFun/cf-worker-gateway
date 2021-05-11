@@ -1,3 +1,12 @@
+# [1.0.0-canary.0](https://github.com/arctome/worker-scaffold/compare/v2.0.0-0...v1.0.0-canary.0) (2021-05-11)
+
+
+### Bug Fixes
+
+* version ([c16b6bb](https://github.com/arctome/worker-scaffold/commit/c16b6bb254f19467ae583f0f66f7bbbed29a9e6d))
+
+
+
 # [2.0.0-0](https://github.com/arctome/worker-scaffold/compare/v1.0.0-0...v2.0.0-0) (2021-05-11)
 
 
