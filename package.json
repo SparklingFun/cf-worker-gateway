@@ -13,8 +13,9 @@
     "prepare": "husky install"
   },
   "keywords": [
-    "gateway",
-    "Worker"
+    "Cloudflare",
+    "Cloudflare Worker",
+    "Web framework"
   ],
   "author": "Arcto <sparkinglemon@foxmail.com>",
   "license": "MIT",
