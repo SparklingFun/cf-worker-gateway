@@ -1,3 +1,12 @@
+# [1.0.0-canary.1](https://github.com/arctome/worker-scaffold/compare/v1.0.0-canary.0...v1.0.0-canary.1) (2021-05-11)
+
+
+### Features
+
+* **core:** add alias functions ([bb6b280](https://github.com/arctome/worker-scaffold/commit/bb6b280d17e49b6fef5bf9ca8b6a3f46850a4631))
+
+
+
 # [1.0.0-canary.0](https://github.com/arctome/worker-scaffold/compare/v2.0.0-0...v1.0.0-canary.0) (2021-05-11)
 
 
