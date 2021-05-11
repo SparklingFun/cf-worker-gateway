@@ -1,6 +1,6 @@
 const bootstrap = require("../bootstrap");
 
-test('[Helpers] Allow OPTIONS request', async () => {
+test('[Helpers - cors] Allow OPTIONS request', async () => {
     const tester = bootstrap("/test2", "/test2", "cors({'test': '1'})", {
         method: 'OPTIONS'
     })
@@ -8,7 +8,7 @@ test('[Helpers] Allow OPTIONS request', async () => {
     return expect(res.status).toBe(204);
 });
 
-test('[Helpers] Allow OPTIONS request with custom headers', async () => {
+test('[Helpers - cors] Allow OPTIONS request with custom headers', async () => {
     const tester = bootstrap("/test2", "/test2", "cors({'allowedHeaders': 'Test-Header'})", {
         method: 'OPTIONS',
         headers: {

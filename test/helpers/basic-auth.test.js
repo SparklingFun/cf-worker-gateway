@@ -1,6 +1,6 @@
 const bootstrap = require("../bootstrap");
 
-test('[Helpers] Basic Auth take effect', async () => {
+test('[Helpers - BasicAuth] Basic Auth take effect', async () => {
     const username = "YOUR_USER_NAME";
     const password = "YOUR_PASSWORD";
     const tester = bootstrap("/test2", "/test2", `basicAuth()`, {
@@ -13,7 +13,7 @@ test('[Helpers] Basic Auth take effect', async () => {
     return expect(res.status).toBe(200);
 });
 
-test('[Helpers] Wrong password will be blocked',async () => {
+test('[Helpers - BasicAuth] Wrong password will be blocked',async () => {
     const username = "YOUR_USER_NAME";
     const password = "YOUR_PASSWORDRD";
     const tester = bootstrap("/test2", "/test2", `basicAuth()`, {
@@ -26,7 +26,7 @@ test('[Helpers] Wrong password will be blocked',async () => {
     return expect(res.status).toBe(401);
 });
 
-test('[Helpers] Children paths will also be blocked',async () => {
+test('[Helpers - BasicAuth] Children paths will also be blocked',async () => {
     const username = "YOUR_USER_NAME";
     const password = "YOUR_PASSWORDRD";
     const tester = bootstrap("/test2/a/b/c", "/test2/(.*)+", `basicAuth()`, {
