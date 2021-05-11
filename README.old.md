@@ -1,8 +1,6 @@
 # cf-worker-gateway
 
-# v0.2
-
-> If you are using version below 0.2.0, please read [README.old.md](https://github.com/SparklingFun/cf-worker-gateway/blob/main/README.old.md) to see full reference.
+> Versions below `0.3.0-canary.0` and above `0.2.0-canary.0` only support SYNC middlewares, below `0.2.0-canary.0` are not in middleware mode, if you are using these versions, please read [README.old.md](https://github.com/SparklingFun/cf-worker-gateway/blob/main/README.old.md) to see reference.
 
 ## Usage
 
@@ -11,14 +9,15 @@ Pre-handle requests that worker receive, get directly response or modify event, 
 ## Quick Start
 
 ```bash
-npm install cf-worker-gateway@0.2.0-canary.1 --save
-# yarn add cf-worker-gateway@0.2.0-canary.1
+npm install cf-worker-gateway@0.3.0-canary.0 --save
+# yarn add cf-worker-gateway@0.3.0-canary.0
 ```
 
 A very simple example:
 
 ```javascript
 import gateway from "cf-worker-gateway";
+import redirect from "cf-worker-gateway/lib/middlewares/redirect";
 
 addEventListener('fetch', (event) => {
     const app = new Gateway(event);
@@ -28,31 +27,45 @@ addEventListener('fetch', (event) => {
             destination: '/api/test'
         }]
     })
-    const gatewayResult = app();
-    event.respondWith(gatewayResult instanceof Response ? gatewayResult : handleRequest(gatewayResult); // handleRequest is your function to map assets, decided on which package you used.
-})
+    // add your own handler at the last app.use(), such as `handleEvent` or `getAssestFromKV`, using `flareact` solution as example.
+    app.use(event => {
+      return handleEvent(event, require.context("./pages/", true, /\.(js|jsx|ts|tsx)$/), DEBUG)
+    })
+
+    /* The most simple way, just app.run() */
+    // event.respondWith(app.run());
+
+    /* or you can pass a callback function to modify response, even async/await function. */
+    event.respondWith(app.run(async (res) => {
+        // Your jobs that need await...
+        res.headers.set("Access-Control-Allow-Origin", "*");
+        return res;
+    }))
+}
 ```
 
 ## Middleware
 
 When `cf-worker-gateway` was create, it contains a plenty of configure options and functions, which are not organized well. This is the reason why "middleware" design was applied since 0.2.0 (canary versions). Different middlewares for different usage, can be easily import from package. Or you can easily make your own middleware just follow the guide below.
 
-A simple guide for create a new middleware:
+> Async middlewares are supported from `0.3.0-canary.0`, please take care!
+
+A simple guide for creating a new middleware:
 
 ```javascript
 // your custom middleware
 function customizedMiddleware(option) { // if you need pass some options, a wrapper is needed.
-    return function(event, next) { // all middleware apply to 2 parameters, event, and next();
+    return async function(event) { // all middleware apply to 1 parameters, event;
         // const someRule = ...
         // const otherRule = ...
         if(someRule) {
             return new Response(); // you can directly return a response when matched
         } else if(otherRule) {
             let modifiedEvent = new Event('fetch');
-            next(modifiedEvent); // modify event, and pass to next, this modification will not lose
+            return modifiedEvent; // modify event, and pass to next, this modification will not lose
         } else {
             // all rules are not match, please call next() without any param
-            next();
+            return;
         }
     }
 }
@@ -137,9 +150,59 @@ app.use(robotsTxt({
 }))
 ```
 
+#### ipController
+
+Use an IP address or range to block certain IP, full reference please see [Github-ipaddr.js](https://github.com/whitequark/ipaddr.js#readme)
+
+Code example,
+
+```javascript
+import ipController from "cf-worker-gateway/helpers/ipController";
+
+app.use(ipController({
+    deny: ['127.0.0.1'],
+    allow: ['10.1.1.0/24']
+}))
+```
+
+#### accessRateLimit
+
+An easy way to block Crazy Spiders or Malicious requests, you need a Worker KV as a jail, and some rules. For example,
+
+```javascript
+import accessRateLimit from "cf-worker-gateway/helpers/accessRateLimit";
+
+app.use(accessRateLimit({
+    rules: [
+        {
+            path: "/api/test",
+            times: 1,
+            banTime: 1000
+        }
+    ],
+    jailKVSpace: KeyValueStore
+}))
+```
+
+#### basicAuth
+
+Add HTTP Authentication to your specific path, you can use your user & password to login.
+
+For example,
+
+```javascript
+import basicAuth from "cf-worker-gateway/helpers/basicAuth";
+
+app.use(basicAuth({
+    path: "/admin", // You can also use an array, like `["/admin", "/admin/**"]` to specify multi path.
+    USER_NAME: "YOUR_USER_NAME",
+    USER_PASS: "YOUR_PASSWORD"
+}))
+```
+
 ### deprecated
 
-> __Warning: These middlewares may effect your worker performance, please use CAREFULLY.__
+> __Warning: These middlewares may effect your worker performance, obviously in async middleware mode, please use CAREFULLY.__
 
 #### faviconByBase64
 
@@ -149,121 +212,4 @@ You can config a `favicon.ico` by using this middleware, which uses `Buffer` fro
 import faviconByBase64 from "cf-worker-gateway/deprecated/faviconByBase64";
 
 app.use(faviconByBase64("ignored" | "some-base64-text"));
-```
-
-
-# v0.1
-
-__:warning: Attention: Current version is in canary, PLEASE always use the latest version!__
-
-## Getting Start
-
-Install via npm:
-
-```bash
-npm install cf-worker-gateway --save
-```
-
-Or via yarn:
-
-```bash
-yarn add cf-worker-gateway
-```
-
-## Package Usage
-
-Redirect or rewrite your request, behave like a Gateway.
-
-Configuration is designed referring to Next.js ["Redirect & Rewrite" RFC](https://github.com/vercel/next.js/discussions/9081).
-
-## Example
-
-```javascript
-import { gateway } from "cf-worker-gateway";
-
-addEventListener("fetch", event => {
-  const gateWayResult = gateway(event, {
-    redirects: [
-      // {source: "/path-a", destination: "/path-b"}
-    ],
-    rewrites: []
-  })
-  // modified event usually, but it will be response if matched a redirect rule.
-  event.respondWith(gateWayResult instanceof Response ? gateWayResult : handleRequest(gateWayResult.request));
-})
-```
-
-## Docs
-
-> Glob pattern supported by `glob-to-regexp`, check it's [docs](https://github.com/fitzgen/glob-to-regexp#readme) for pattern rules.
-
-### `gateway(event: FetchEvent, options: GatewayOptions): ModifiedFetchEvent | FetchEvent | Response`
-
-`gateway` is the default export function, you need to pass the origin event, if `redirects` rules matched, it will return a redirected response. Otherwise, it will return a modified (or the origin event if no rule was matched) event.
-
-### GatewayOptions - `basePath`
-
-if `basePath` is delivered, all rules (both `rewrites` and `redirects`) will be prefixed by using `basePath`
-
-### GatewayOptions - `allowOptionRequest`
-
-As a gateway, you can make CORS much more simple, just enable `allowOptionRequest`, set it `true`, and all `OPTIONS` request will have a `204` response.
-
-> If you need `Access-Control-Allow-Headers`, you need to pay attention in ACTUAL response, such as a JSON `POST` response.
-
-### GatewayOptions - `faviconBase64`
-
-Using `Buffer` to return a `image/x-icon` ico image, allow you set a base64 image. 
-
-> If you just want to skip all error request about `favicon.ico`, you can set `ignored`.
-
-### GatewayOptions - `rewrites`
-
-> `rewrite` rules have a higher priority than `redirects`.
-
-There're 2 properties in one rule,
-
-| Prop          | Type                                 | Allow Empty |
-|---------------|--------------------------------------|:-----------:|
-| `source`      | String (glob pattern)                |             |
-| `destination` | String (Your router support pattern) |             |
-
-Attention, `rewrites` will overwrite the origin request url, so if you want to visit the origin event, you can access `event.$$origin` in modified events (since v0.1.3).
-
-### GatewayOptions - `redirects`
-
-There're 3 properties in one rule, similar to `rewrites`,
-
-| Prop          | Type                                 | Allow Empty |
-|---------------|--------------------------------------|:-----------:|
-| `source`      | String (glob pattern)                |             |
-| `destination` | String (Your router support pattern) |             |
-| `permant`     | Boolean                              |  √ (default `false`)  |
-| `crossOrigin` | Boolean                              |  √ (default `false`)  |
-
-> If `crossOrigin` was set, the global `basePath` will be ignored.
-
-## Helpers
-
-### `robotsHandler(event: FetchEvent, options: RobotConfig): Response | undefined`
-
-Useful function that handle robots.txt requests, configuration is so simple.
-
-```javascript
-import { robotsHandler } from "cf-worker-gateway";
-
-addEventListener("fetch", event => {
-  const robotRes = robotsHandler(event, {
-    rules: [
-      {
-        userAgent: "*",
-        allow: ["/test", "/hello-world"],
-        disallow: ["/"]
-      }
-    ],
-    sitemapUrl: [""]
-  });
-  event.respondWith(robotRes || new Response("Test", {status: 200}));
-  // it will response a robots.txt when request url is like `some-url.path.com/robots.txt`
-})
 ```
