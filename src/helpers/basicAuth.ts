@@ -28,12 +28,12 @@ const Credentials = function (this: any, name: string, pass: string): void {
 }
 
 
-const unauthorizedResponse = function (string: string) {
+const unauthorizedResponse = function (string: string, realm?: string) {
     return new Response(string, {
         status: 401,
         statusText: "'Authentication required.'",
         headers: {
-            "WWW-Authenticate": 'Basic realm="User Visible Realm"'
+            "WWW-Authenticate": 'Basic' + (realm ? ' realm="'+realm+'"' : "")
         }
     })
 }
@@ -60,6 +60,7 @@ const parseAuthHeader = function (string: string | null) {
 interface basicAuthOption {
     USER_NAME?: string
     USER_PASS?: string
+    realm?: string
 }
 
 /**
@@ -75,10 +76,10 @@ export default function basicAuth(options: basicAuthOption) {
     return function (event: FetchEvent) {
         const credentials = parseAuthHeader(event.request.headers.get("Authorization"));
         if (credentials === undefined) {
-            return unauthorizedResponse("Unauthorized");
+            return unauthorizedResponse("Unauthorized", options.realm);
         }
         if (!credentials || credentials.name !== USER_NAME || credentials.pass !== USER_PASS) {
-            return unauthorizedResponse("Unauthorized")
+            return unauthorizedResponse("Unauthorized", options.realm)
         } else {
             return;
         }
