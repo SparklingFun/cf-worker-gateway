@@ -1,3 +1,12 @@
+# [1.0.0-canary.2](https://github.com/arctome/worker-scaffold/compare/v1.0.0-canary.1...v1.0.0-canary.2) (2021-05-12)
+
+
+### Bug Fixes
+
+* **helpers:** add custom realm ([ce6ff36](https://github.com/arctome/worker-scaffold/commit/ce6ff365519113376fa6162f1df3f26d0cc52420))
+
+
+
 # [1.0.0-canary.1](https://github.com/arctome/worker-scaffold/compare/v1.0.0-canary.0...v1.0.0-canary.1) (2021-05-11)
 
 
