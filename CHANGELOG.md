@@ -1,3 +1,12 @@
+# [1.0.0-canary.3](https://github.com/arctome/worker-scaffold/compare/v1.0.0-canary.2...v1.0.0-canary.3) (2021-06-07)
+
+
+### Bug Fixes
+
+* using `faviconByBase64` without path now have a default catch ([d5ce5bc](https://github.com/arctome/worker-scaffold/commit/d5ce5bc9fc2e4836b31fdb06deded7be481d5fe9))
+
+
+
 # [1.0.0-canary.2](https://github.com/arctome/worker-scaffold/compare/v1.0.0-canary.1...v1.0.0-canary.2) (2021-05-12)
 
 
