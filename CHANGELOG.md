@@ -1,3 +1,12 @@
+# [1.0.0-canary.4](https://github.com/arctome/worker-scaffold/compare/v1.0.0-canary.3...v1.0.0-canary.4) (2021-06-07)
+
+
+### Bug Fixes
+
+* fix `useExactPath` together with `endsWith` may cause mismatch ([1376c0b](https://github.com/arctome/worker-scaffold/commit/1376c0be9af45c03b635beb026e126d6842465c7))
+
+
+
 # [1.0.0-canary.3](https://github.com/arctome/worker-scaffold/compare/v1.0.0-canary.2...v1.0.0-canary.3) (2021-06-07)
 
 
