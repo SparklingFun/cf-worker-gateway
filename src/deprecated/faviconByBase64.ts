@@ -3,9 +3,9 @@
  * @param b64str Image data encoded in Base64, accept "ignored" for empty `favicon.icon` (just for avoiding HTTP Code 500).
  * @returns Middleware handler
  */
-export default function faviconByBase64(b64str: string) {
+export default function faviconByBase64(b64str: string, useExactPath: boolean = false) {
   return function (event: FetchEvent) {
-    if (b64str) {
+    if (b64str && (!useExactPath && event.request.url.endsWith("favicon.ico"))) {
       // you can ignore all request of `favicon.ico`
       if (b64str === "ignored") {
         return new Response(null, {
