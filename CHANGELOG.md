@@ -1,3 +1,12 @@
+# [1.0.0-canary.5](https://github.com/arctome/worker-scaffold/compare/v1.0.0-canary.4...v1.0.0-canary.5) (2021-06-07)
+
+
+### Bug Fixes
+
+* unexpect skip ([3727f76](https://github.com/arctome/worker-scaffold/commit/3727f767eb053a00ab8cdf7c6f2a865379610561))
+
+
+
 # [1.0.0-canary.4](https://github.com/arctome/worker-scaffold/compare/v1.0.0-canary.3...v1.0.0-canary.4) (2021-06-07)
 
 
