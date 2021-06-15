@@ -1,3 +1,13 @@
+## [1.0.1-0](https://github.com/arctome/worker-scaffold/compare/v1.0.0-canary.5...v1.0.1-0) (2021-06-15)
+
+
+### Bug Fixes
+
+* **deps:** bump `handlebars` to ^4.7.7 ([9b87935](https://github.com/arctome/worker-scaffold/commit/9b879353c031e4c21d38eb5d30a2d8a0d486d74b))
+* **deps:** manually fix problems from dependent bot ([5cb0226](https://github.com/arctome/worker-scaffold/commit/5cb0226a0f85e55f64a99281b8f8947eb892bc7d))
+
+
+
 # [1.0.0-canary.5](https://github.com/arctome/worker-scaffold/compare/v1.0.0-canary.4...v1.0.0-canary.5) (2021-06-07)
 
 
