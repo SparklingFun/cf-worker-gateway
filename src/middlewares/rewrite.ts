@@ -13,7 +13,7 @@ const rewrite = function (path: string) {
             redirectedUrl = tmp;
         } catch(e) {
             let reqUrl = new URL(oldReq.url);
-            let tmp = new URL(reqUrl.protocol + '//' + reqUrl.host + path);
+            let tmp = new URL(reqUrl.protocol + '//' + reqUrl.host + path + reqUrl.search);
             redirectedUrl = tmp;
             // if not correct, throw error.
         }
