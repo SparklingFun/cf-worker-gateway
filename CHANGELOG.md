@@ -1,3 +1,12 @@
+## [1.0.3](https://github.com/arctome/worker-scaffold/compare/v1.0.2...v1.0.3) (2021-06-15)
+
+
+### Bug Fixes
+
+* **middleware:** fix incorrect modify request FetchEvent ([766e4a8](https://github.com/arctome/worker-scaffold/commit/766e4a815a774d8fb5762478204d3174689ca446))
+
+
+
 ## [1.0.2](https://github.com/arctome/worker-scaffold/compare/v1.0.1...v1.0.2) (2021-06-15)
 
 
