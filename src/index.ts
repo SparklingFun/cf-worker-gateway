@@ -6,10 +6,13 @@ import faviconByBase64 from "./deprecated/faviconByBase64";
 import cors from "./helpers/cors";
 import robotsTxt from "./helpers/robotsTxt";
 import basicAuth from "./helpers/basicAuth";
+// type import
+import { Match } from "path-to-regexp";
 
 interface FetchEvent extends Event {
     request: Request;
     respondWith(response: Promise<Response> | Response): Promise<Response>;
+    match?: Match;
 }
 interface MiddlewareHandlerBundle {
     default: Function|Promise<Function>
@@ -23,6 +26,7 @@ const WorkerScaffold = function (event: FetchEvent, isDev: boolean=false): Funct
     const fns: Array<Function|Promise<Function>|MiddlewareHandlerBundle> = [];
     // main executer (it's a quene model, first `use`, first execute, first return when matched)
     const app = function () {}
+    let matched: Match;
 
     /**
      * Declare middleware handler and its path, handlers will automatically execute in serial.
@@ -36,11 +40,14 @@ const WorkerScaffold = function (event: FetchEvent, isDev: boolean=false): Funct
         }
 
         const isMatched = match(path || "", { encode: encodeURI, decode: decodeURIComponent });
-        let matchResult: boolean|Object = false;
+        let matchResult: Match = false;
         try {
             matchResult = isMatched(new URL(event.request.url).pathname);
         } catch(e) {}
         if((path === undefined || matchResult) && handler) {
+            if(matchResult) {
+                matched = matchResult;
+            }
             fns.push(handler);
         }
     }
@@ -92,6 +99,7 @@ const WorkerScaffold = function (event: FetchEvent, isDev: boolean=false): Funct
                 } else {
                     if (result !== undefined) {
                         modified = result;
+                        modified.match = matched;
                     }
                 }
             }
