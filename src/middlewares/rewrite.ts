@@ -14,6 +14,9 @@ const rewrite = function (targetRegexp: string, topath: string) {
         try {
             matchResult = isMatched(new URL(event.request.url).pathname);
         } catch(e) {}
+        if(!matchResult) {
+            return;
+        }
 
         let oldReq = event.request;
         let redirectedUrl;
@@ -30,10 +33,8 @@ const rewrite = function (targetRegexp: string, topath: string) {
         let newReq = Object.assign({}, rewritedReq, {url: redirectedUrl.href});
         // @ts-ignore
         rewritedReq.request = newReq;
-        if(matchResult) {
-            // @ts-ignore
-            rewritedReq.match = matchResult;
-        }
+        // @ts-ignore
+        rewritedReq.match = matchResult;
         return rewritedReq;
     }
 }
