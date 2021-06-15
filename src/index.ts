@@ -23,6 +23,7 @@ const WorkerScaffold = function (event: FetchEvent, isDev: boolean=false): Funct
     const fns: Array<Function|Promise<Function>|MiddlewareHandlerBundle> = [];
     // main executer (it's a quene model, first `use`, first execute, first return when matched)
     const app = function () {}
+    let matched: null|Object = null;
 
     /**
      * Declare middleware handler and its path, handlers will automatically execute in serial.
@@ -41,6 +42,9 @@ const WorkerScaffold = function (event: FetchEvent, isDev: boolean=false): Funct
             matchResult = isMatched(new URL(event.request.url).pathname);
         } catch(e) {}
         if((path === undefined || matchResult) && handler) {
+            if(matchResult) {
+                matched = matchResult;
+            }
             fns.push(handler);
         }
     }
@@ -82,6 +86,8 @@ const WorkerScaffold = function (event: FetchEvent, isDev: boolean=false): Funct
         try {
             let respond;
             let modified = event;
+            // @ts-ignore
+            modified.match = matched;
             for (let i = 0; i < fns.length; i++) {
                 // An Typescript issue which needs an ignore, same below {@link https://github.com/microsoft/TypeScript/issues/37663}
                 // @ts-ignore
