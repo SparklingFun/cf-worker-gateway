@@ -1,2 +1,2 @@
-declare const rewrite: (path: string) => (event: FetchEvent) => Event | undefined;
+declare const rewrite: (targetRegexp: string, topath: string) => (event: FetchEvent) => Event | undefined;
 export default rewrite;
