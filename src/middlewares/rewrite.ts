@@ -1,3 +1,9 @@
+// type import
+import { Match } from "path-to-regexp";
+interface MiddlewareFetchEvent extends Event {
+    request?: Request;
+    match?: Match;
+}
 /**
  * Middleware - Rewrite
  * @param path Rewrite url path (will automatically try absolute or relative)
@@ -17,9 +23,10 @@ const rewrite = function (path: string) {
             redirectedUrl = tmp;
             // if not correct, throw error.
         }
-        let rewritedReq = new Event("fetch");
-        let newReq = Object.assign({}, rewritedReq, {url: redirectedUrl.href});
-        // @ts-ignore
+        let rewritedReq: MiddlewareFetchEvent = new Event("fetch");
+        let newReq = new Request(redirectedUrl.href, {
+            ...oldReq
+        })
         rewritedReq.request = newReq;
         return rewritedReq;
     }
