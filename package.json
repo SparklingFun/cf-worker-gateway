@@ -44,7 +44,8 @@
   "resolutions": {
     "trim-newlines": "^3.0.1",
     "hosted-git-info": "^2.8.9",
-    "minimist": "^0.2.1"
+    "minimist": "^0.2.1",
+    "handlebars": "^4.7.7"
   },
   "files": [
     "/lib",
