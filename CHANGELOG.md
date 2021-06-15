@@ -1,3 +1,12 @@
+## [1.0.2](https://github.com/arctome/worker-scaffold/compare/v1.0.1...v1.0.2) (2021-06-15)
+
+
+### Bug Fixes
+
+* **middleware:** `rewrite` url now has origin search string ([ee2387a](https://github.com/arctome/worker-scaffold/commit/ee2387a72dd4bcf61668fc4144519f0f7087900b))
+
+
+
 ## [1.0.1](https://github.com/arctome/worker-scaffold/compare/v1.0.1-0...v1.0.1) (2021-06-15)
 
 
