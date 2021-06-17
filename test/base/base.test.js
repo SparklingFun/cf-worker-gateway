@@ -1,17 +1,17 @@
-const fs = require('fs');
+const fs = require("fs");
 const Cloudworker = require("@dollarshaveclub/cloudworker");
 const code = fs.readFileSync(process.cwd() + "/dist/index.js");
-const origin = 'http://127.0.0.1';
+const origin = "http://127.0.0.1";
 
 // test bootstrapper
-function gatewayTester(testPath = '/test2', middlewaresCode) {
+function gatewayTester(testPath = "/test2", middlewaresCode) {
   const simpleScript = `
-${code.toString().replace(/export [\s\S]*;/g, '')}
+${code.toString().replace(/export [\s\S]*;/g, "")}
 
 addEventListener('fetch', event => {
     const app = new WorkerScaffold(event);
     
-    ${middlewaresCode || ''}
+    ${middlewaresCode || ""}
 
     app.use((event) => {
       return new Response(event.request.url, {status: 200})
@@ -19,20 +19,22 @@ addEventListener('fetch', event => {
     
     return event.respondWith(app.run());
 })
-`
-  const req = new Cloudworker.Request('http://127.0.0.1' + testPath);
+`;
+  const req = new Cloudworker.Request("http://127.0.0.1" + testPath);
   const cw = new Cloudworker(simpleScript, {
     bindings: {
       Event,
-      Buffer
-    }
-  })
-  return cw.dispatch(req)
+      Buffer,
+    },
+  });
+  return cw.dispatch(req);
 }
 
 // multi return response test
-test('[Base] Multi middlewares with response should return first match', () => {
-  return gatewayTester('/test2', `
+test("[Base] Multi middlewares with response should return first match", () => {
+  return gatewayTester(
+    "/test2",
+    `
       app.use('/test2', function(event) {
         if(event.request.url === "http://127.0.0.1/test") {
           return new Response("test", {status: 204});
@@ -48,7 +50,8 @@ test('[Base] Multi middlewares with response should return first match', () => {
           return new Response("test", {status: 400});
         }
       })
-    `).then(res => {
+    `
+  ).then((res) => {
     expect(res.status).toBe(200);
-  })
+  });
 });

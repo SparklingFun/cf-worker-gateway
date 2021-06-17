@@ -1,12 +1,12 @@
-const fs = require('fs');
+const fs = require("fs");
 const Cloudworker = require("@dollarshaveclub/cloudworker");
 const code = fs.readFileSync(process.cwd() + "/dist/index.js");
-const origin = 'http://127.0.0.1';
+const origin = "http://127.0.0.1";
 
 // test bootstrapper
-function gatewayTester(testPath = '/test2', middlewaresCode) {
+function gatewayTester(testPath = "/test2", middlewaresCode) {
   const simpleScript = `
-${code.toString().replace(/export [\s\S]*;/g, '')}
+${code.toString().replace(/export [\s\S]*;/g, "")}
 
 addEventListener('fetch', event => {
     const app = new WorkerScaffold(event, true);
@@ -24,7 +24,7 @@ addEventListener('fetch', event => {
       }
     }
     
-    ${middlewaresCode || ''}
+    ${middlewaresCode || ""}
 
     app.use('/test2', (event) => {
       return new Response(event.request.url, {status: 200})
@@ -32,20 +32,22 @@ addEventListener('fetch', event => {
 
     return event.respondWith(app.run());
 })
-`
-  const req = new Cloudworker.Request('http://127.0.0.1' + testPath);
+`;
+  const req = new Cloudworker.Request("http://127.0.0.1" + testPath);
   const cw = new Cloudworker(simpleScript, {
     bindings: {
       Event,
-      Buffer
-    }
-  })
-  return cw.dispatch(req)
+      Buffer,
+    },
+  });
+  return cw.dispatch(req);
 }
 
 // multi return response test
-test('[Base] Callback in app.run can modify response', () => {
-  return gatewayTester('/test2', `
+test("[Base] Callback in app.run can modify response", () => {
+  return gatewayTester(
+    "/test2",
+    `
       app.use('/test2', function(event) {
         if(event.request.url === "http://127.0.0.1/test") {
           return new Response("test", {status: 204});
@@ -62,14 +64,17 @@ test('[Base] Callback in app.run can modify response', () => {
         }
       })
       app.use(test());
-    `).then(async res => {
+    `
+  ).then(async (res) => {
     expect(res.headers.get("Access-Control-Allow-Origin")).toBe("*");
-  })
+  });
 });
 
 // multi return response test
-test('[Base] Callback in app.run can modify response', () => {
-  return gatewayTester('/test2', `
+test("[Base] Callback in app.run can modify response", () => {
+  return gatewayTester(
+    "/test2",
+    `
       app.use(function(event) {
         if(event.request.url === "http://127.0.0.1/test") {
           return new Response("test", {status: 204});
@@ -86,7 +91,8 @@ test('[Base] Callback in app.run can modify response', () => {
         }
       })
       app.use(test())
-    `).then(res => {
+    `
+  ).then((res) => {
     expect(res.headers.get("Test-Await-Success")).toBe("29349655");
-  })
+  });
 });
