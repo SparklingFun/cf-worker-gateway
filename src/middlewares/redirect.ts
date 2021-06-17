@@ -27,7 +27,7 @@ const redirect = function (path: string, permanent: boolean | number) {
       status = permanent ? 308 : 307;
     }
     // @ts-ignore
-    return Response.redirect(redirectedUrl.href, status);
+    return Response.redirect(redirectedUrl.href, status || 307);
   };
 };
 

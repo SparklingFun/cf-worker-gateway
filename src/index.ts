@@ -160,6 +160,6 @@ const WorkerScaffold = function (event: FetchEvent, isDev = false): Function {
   return app;
 };
 
-// Only for jest testing, not recommand to use directly from index.
+// Export shortcuts for easier usage
 export { redirect, rewrite, faviconByBase64, cors, robotsTxt, basicAuth };
 export default WorkerScaffold;
