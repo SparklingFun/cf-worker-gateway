@@ -1,32 +1,53 @@
 const bootstrap = require("../bootstrap");
-const origin = "http://127.0.0.1";
 
-test("[Middleware - Rewrite] From-to rewrite", async () => {
-  const tester = bootstrap("/test2", "/test2", `rewrite('/test2')`);
-  let res = await tester.run();
-  const resText = await res.text();
-  return expect(resText).toBe(origin + "/test2");
-});
-test("[Middleware - Rewrite] Simple Redirect", async () => {
-  const tester = bootstrap("/test2", "/test2", `rewrite('/docs/test2')`);
-  const res = await tester.run();
-  const resText = await res.text();
-  return expect(resText).toBe(origin + "/docs/test2");
-});
-test("[Middleware - Rewrite] Remove prefix rewrite", async () => {
-  // See also {@link https://github.com/pillarjs/path-to-regexp#compatibility-with-express--4x}
-  const tester = bootstrap("/docs/test2", "/docs/(.*)", `rewrite('/test2')`);
-  const res = await tester.run();
-  const resText = await res.text();
-  return expect(resText).toBe(origin + "/test2");
-});
-test("[Middleware - Rewrite] Remove prefixed deep path rewrite", async () => {
-  const tester = bootstrap(
-    "/docs/test1/test2/test3",
-    "/docs/(.*)+",
-    `rewrite('/test2')`
-  );
-  const res = await tester.run();
-  const resText = await res.text();
-  return expect(resText).toBe(origin + "/test2");
+describe("Testing Middleware - rewrite works when ", () => {
+  test("rewrite to other path", () => {
+    return bootstrap(
+      "/middleware/rewrite/origin",
+      `
+      app.use("/middleware/rewrite/origin", rewrite("/middleware/rewrite/other"));
+    `
+    ).then(async (res) => {
+      const body = await res.text();
+      expect(body.indexOf("/middleware/rewrite/other") > -1).toBe(true);
+    });
+  });
+  test("rewrite to other domain", () => {
+    return bootstrap(
+      "/middleware/rewrite/origin",
+      `
+      app.use("/middleware/rewrite/origin", rewrite("https://github.com/"));
+    `
+    ).then(async (res) => {
+      const body = await res.text();
+      // Last middleware in bootstrap will return request url.
+      expect(body).toBe("https://github.com/");
+    });
+  });
+  // TODO: Multi times rewrite is not supported in current version.
+  // test("multi times rewrite", () => {
+  //   return bootstrap("/middleware/rewrite/origin", `
+  //     app.use("/middleware/rewrite/origin", rewrite("/middleware/rewrite/a"));
+  //     app.use("/middleware/rewrite/a", rewrite("https://github.com/"));
+  //   `).then(async res => {
+  //     const body = await res.text();
+  //     // Last middleware in bootstrap will return request url.
+  //     expect(body).toBe("https://github.com/");
+  //   })
+  // })
+  test("matched path with `path-to-regexp`", () => {
+    return bootstrap(
+      "/middleware/rewrite/origin",
+      `
+      app.use("/middleware/rewrite/:oldpath", rewrite("/middleware/rewrited/hello"));
+      app.use(event => {
+        return new Response(event.match ? event.match.params.oldpath : "No match");
+      })
+    `
+    ).then(async (res) => {
+      const body = await res.text();
+      // Last middleware in bootstrap will return request url.
+      expect(body).toBe("origin");
+    });
+  });
 });
