@@ -30,9 +30,9 @@
     "path-to-regexp": "^6.2.0"
   },
   "devDependencies": {
-    "@babel/plugin-transform-modules-commonjs": "^7.14.0",
-    "@commitlint/cli": "^12.1.1",
-    "@commitlint/config-conventional": "^12.1.1",
+    "@babel/plugin-transform-modules-commonjs": "^7.14.5",
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
     "@dollarshaveclub/cloudworker": "^0.1.2",
     "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
@@ -50,9 +50,9 @@
     "lint-staged": "^11.0.0",
     "make-coverage-badge": "^1.2.0",
     "prettier": "2.3.1",
-    "rollup": "^2.47.0",
-    "tslib": "^2.2.0",
-    "typescript": "^4.2.4"
+    "rollup": "^2.52.1",
+    "tslib": "^2.3.0",
+    "typescript": "^4.3.4"
   },
   "resolutions": {
     "trim-newlines": "^3.0.1",
