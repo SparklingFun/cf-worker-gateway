@@ -1,7 +1,7 @@
 # @arctome/worker-scaffold
 
 ![Workflow](https://github.com/arctome/worker-scaffold/workflows/Publish/badge.svg)
-![Coverage](./coverage/badge-lines.svg)
+![Coverage](./coverage/badge.svg)
 
 > Package `cf-worker-gateway` is the temp name of this package, since v1.0.0, core function & middlewares has been refactored. If you are using `cf-worker-gateway` under v0.4.1-cananry2, please see [README.old.md](./README.old.md)
 
