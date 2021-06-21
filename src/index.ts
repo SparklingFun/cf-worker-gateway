@@ -38,7 +38,9 @@ class WorkerScaffold {
   }
 
   // public configurations
-  static errorHandler(_error: Error) {}
+  static errorHandler(_error: Error): undefined | Response {
+    return;
+  }
 
   // public members
   public use(
@@ -169,7 +171,10 @@ class WorkerScaffold {
         WorkerScaffold.errorHandler &&
         typeof WorkerScaffold.errorHandler === "function"
       ) {
-        WorkerScaffold.errorHandler(e);
+        let errorResponse: undefined | Response =
+          WorkerScaffold.errorHandler(e);
+        if (errorResponse && errorResponse instanceof Response)
+          return errorResponse;
       }
       if (this.isDev) {
         return new Response(`Worker Error: ${e.message}`, {
