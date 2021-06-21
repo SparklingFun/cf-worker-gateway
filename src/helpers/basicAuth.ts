@@ -23,9 +23,13 @@ const USER_PASS_REGEXP = /^([^:]*):(.*)$/;
 /**
  * Object to represent user credentials.
  */
-const Credentials = function (_this: any, name: string, pass: string): void {
-  _this.name = name;
-  _this.pass = pass;
+const Credentials = class {
+  name: string;
+  pass: string;
+  constructor(name: string, pass: string) {
+    this.name = name;
+    this.pass = pass;
+  }
 };
 
 const unauthorizedResponse = function (string: string, realm?: string) {
@@ -54,7 +58,7 @@ const parseAuthHeader = function (string: string | null) {
   }
 
   // return credentials object
-  return new (Credentials as any)(userPass[1], userPass[2]);
+  return new Credentials(userPass[1], userPass[2]);
 };
 
 interface basicAuthOption {

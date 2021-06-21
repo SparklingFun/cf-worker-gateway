@@ -20,7 +20,7 @@ declare class WorkerScaffold {
     private fns;
     private matched;
     constructor(event: FetchEvent, isDev?: boolean);
-    errorHandler(_error: Error): void;
+    static errorHandler(_error: Error): void;
     use(path: string | undefined, handler?: Function | MiddlewareHandlerBundle): void;
     get(path: string | undefined, handler?: Function | MiddlewareHandlerBundle): void | Function;
     post(path: string | undefined, handler?: Function | MiddlewareHandlerBundle): void | Function;
