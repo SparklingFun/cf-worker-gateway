@@ -21,19 +21,21 @@ interface MiddlewareHandlerBundle {
 
 const { match } = PathToRegexp;
 
-const WorkerScaffold = function (event: FetchEvent, isDev = false): Function {
-  // middlewares quene
-  const fns: Array<Function | Promise<Function> | MiddlewareHandlerBundle> = [];
-  // main executer (it's a quene model, first `use`, first execute, first return when matched)
-  const app = function () {};
-  let matched: Match;
-
-  /**
-   * Declare middleware handler and its path, handlers will automatically execute in serial.
-   * @param path Matched path for URL, see also {@link https://github.com/pillarjs/path-to-regexp}
-   * @param handler Middleware handler function or object which contains `default` & `callback`
-   */
-  app.use = function (
+class WorkerScaffold {
+  // internal members;
+  private event: FetchEvent;
+  private isDev: boolean = false;
+  private fns: Array<Function | Promise<Function> | MiddlewareHandlerBundle> =
+    [];
+  private matched: Match = false;
+  constructor(event: FetchEvent, isDev?: boolean) {
+    this.event = event;
+    this.isDev = isDev || false;
+  }
+  // public configurations
+  public errorHandler(_error: Error) {}
+  // public members
+  public use(
     path: string | undefined,
     handler?: Function | MiddlewareHandlerBundle
   ): void {
@@ -51,103 +53,108 @@ const WorkerScaffold = function (event: FetchEvent, isDev = false): Function {
     });
     let matchResult: Match = false;
     try {
-      matchResult = isMatched(new URL(event.request.url).pathname);
+      matchResult = isMatched(new URL(this.event.request.url).pathname);
     } catch (e) {
-      if (isDev) throw new Error(e);
+      if (this.isDev) throw new Error(e);
       return;
     }
     if ((path === undefined || matchResult) && handler) {
       if (matchResult) {
-        matched = matchResult;
+        this.matched = matchResult;
       }
-      fns.push(handler);
+      this.fns.push(handler);
     }
-  };
+  }
   /**
    * A bundle of alias functions of `app.use`
    * @returns app.use function
    */
-  app.get = function (
+  get(
     path: string | undefined,
     handler?: Function | MiddlewareHandlerBundle
   ): void | Function {
-    if (event.request.method.toLowerCase() !== "get") return;
-    return app.use(path, handler);
-  };
-  app.post = function (
+    if (this.event.request.method.toLowerCase() !== "get") return;
+    return this.use(path, handler);
+  }
+  post(
     path: string | undefined,
     handler?: Function | MiddlewareHandlerBundle
   ): void | Function {
-    if (event.request.method.toLowerCase() !== "post") return;
-    return app.use(path, handler);
-  };
-  app.head = function (
+    if (this.event.request.method.toLowerCase() !== "post") return;
+    return this.use(path, handler);
+  }
+  head(
     path: string | undefined,
     handler?: Function | MiddlewareHandlerBundle
   ): void | Function {
-    if (event.request.method.toLowerCase() !== "head") return;
-    return app.use(path, handler);
-  };
-  app.put = function (
+    if (this.event.request.method.toLowerCase() !== "head") return;
+    return this.use(path, handler);
+  }
+  put(
     path: string | undefined,
     handler?: Function | MiddlewareHandlerBundle
   ): void | Function {
-    if (event.request.method.toLowerCase() !== "put") return;
-    return app.use(path, handler);
-  };
-  app.delete = function (
+    if (this.event.request.method.toLowerCase() !== "put") return;
+    return this.use(path, handler);
+  }
+  delete(
     path: string | undefined,
     handler?: Function | MiddlewareHandlerBundle
   ): void | Function {
-    if (event.request.method.toLowerCase() !== "delete") return;
-    return app.use(path, handler);
-  };
-  app.options = function (
+    if (this.event.request.method.toLowerCase() !== "delete") return;
+    return this.use(path, handler);
+  }
+  options(
     path: string | undefined,
     handler?: Function | MiddlewareHandlerBundle
   ): void | Function {
-    if (event.request.method.toLowerCase() !== "options") return;
-    return app.use(path, handler);
-  };
-
+    if (this.event.request.method.toLowerCase() !== "options") return;
+    return this.use(path, handler);
+  }
   /**
    * Generate response for `event.respondWith`
    * @returns Expected response which is generated through multiple middlewares
    */
-  app.run = async function (): Promise<Response> {
+  async run(): Promise<Response> {
     try {
       let respond;
-      let modified = event;
+      let modified = this.event;
       /* eslint-disable no-await-in-loop */
-      for (let i = 0; i < fns.length; i += 1) {
+      for (let i = 0; i < this.fns.length; i += 1) {
         // An Typescript issue which needs an ignore, same below {@link https://github.com/microsoft/TypeScript/issues/37663}
         const result =
-          typeof fns[i] === "function"
+          typeof this.fns[i] === "function"
             ? // @ts-ignore
-              await fns[i](modified)
+              await this.fns[i](modified)
             : // @ts-ignore
-              await fns[i].default(modified);
+              await this.fns[i].default(modified);
         if (result instanceof Response) {
           respond = result;
           break;
         } else if (result !== undefined) {
           modified = result;
-          modified.match = matched;
+          modified.match = this.matched;
         }
       }
       if (!respond || !(respond instanceof Response))
         respond = new Response(null, { status: 404 });
-      for (let i = 0; i < fns.length; i += 1) {
+      for (let i = 0; i < this.fns.length; i += 1) {
         // @ts-ignore
-        if (fns[i].callback && typeof fns[i].callback === "function") {
+        if (
+          this.fns[i].callback &&
+          typeof this.fns[i].callback === "function"
+        ) {
           // @ts-ignore
-          respond = await fns[i].callback(event, respond);
+          respond = await this.fns[i].callback(this.event, respond);
         }
       }
-      /* eslint-disable no-await-in-loop */
+      /* eslint-enable no-await-in-loop */
       return respond;
     } catch (e) {
-      if (isDev) {
+      if (this.errorHandler && typeof this.errorHandler === "function") {
+        this.errorHandler(e);
+      }
+      if (this.isDev) {
         return new Response(`Worker Error: ${e.message}`, {
           status: 500,
         });
@@ -156,9 +163,8 @@ const WorkerScaffold = function (event: FetchEvent, isDev = false): Function {
         status: 500,
       });
     }
-  };
-  return app;
-};
+  }
+}
 
 // Export shortcuts for easier usage
 export { redirect, rewrite, faviconByBase64, cors, robotsTxt, basicAuth };
