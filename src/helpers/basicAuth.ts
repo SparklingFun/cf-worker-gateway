@@ -25,7 +25,9 @@ const USER_PASS_REGEXP = /^([^:]*):(.*)$/;
  */
 const Credentials = class {
   name: string;
+
   pass: string;
+
   constructor(name: string, pass: string) {
     this.name = name;
     this.pass = pass;

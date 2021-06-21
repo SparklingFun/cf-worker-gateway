@@ -39,7 +39,7 @@ class WorkerScaffold {
 
   // public configurations
   static errorHandler(_error: Error): undefined | Response {
-    return;
+    return undefined;
   }
 
   // public members
@@ -171,7 +171,7 @@ class WorkerScaffold {
         WorkerScaffold.errorHandler &&
         typeof WorkerScaffold.errorHandler === "function"
       ) {
-        let errorResponse: undefined | Response =
+        const errorResponse: undefined | Response =
           WorkerScaffold.errorHandler(e);
         if (errorResponse && errorResponse instanceof Response)
           return errorResponse;
