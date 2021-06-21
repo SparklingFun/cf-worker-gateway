@@ -1,54 +1,81 @@
-const fs = require('fs');
-const Cloudworker = require("@dollarshaveclub/cloudworker");
-const code = fs.readFileSync(process.cwd() + "/dist/index.js");
-const origin = 'http://127.0.0.1';
+const bootstrap = require("../bootstrap");
 
-// test bootstrapper
-function gatewayTester(testPath = '/test2', middlewaresCode) {
-  const simpleScript = `
-${code.toString().replace(/export [\s\S]*;/g, '')}
-
-addEventListener('fetch', event => {
-    const app = new WorkerScaffold(event);
-    
-    ${middlewaresCode || ''}
-
-    app.use((event) => {
-      return new Response(event.request.url, {status: 200})
+describe("Testing WorkerScaffold's ", () => {
+  test("sync middleware works well", () => {
+    return bootstrap(
+      "/base/sync",
+      `
+      app.use("/base/sync", event => {
+        return new Response("Sync middleware works well")
+      })
+    `
+    ).then(async (res) => {
+      let body = await res.text();
+      expect(body).toBe("Sync middleware works well");
     });
-    
-    return event.respondWith(app.run());
-})
-`
-  const req = new Cloudworker.Request('http://127.0.0.1' + testPath);
-  const cw = new Cloudworker(simpleScript, {
-    bindings: {
-      Event,
-      Buffer
-    }
-  })
-  return cw.dispatch(req)
-}
+  });
 
-// multi return response test
-test('[Base] Multi middlewares with response should return first match', () => {
-  return gatewayTester('/test2', `
-      app.use('/test2', function(event) {
-        if(event.request.url === "http://127.0.0.1/test") {
-          return new Response("test", {status: 204});
+  test("async middleware works well", () => {
+    return bootstrap(
+      "/base/async",
+      `
+      app.use("/base/async", async event => {
+        const resp = await fetch("https://github.com");
+        if(resp.ok) {
+          return new Response("Async middleware works well");
+        } else {
+          return new Response("Async middleware meet some problem", {status: 500})
         }
       })
-      app.use('/test2',function(event) {
-        if(event.request.url === "http://127.0.0.1/test2") {
-          return new Response("test", {status: 200});
+    `
+    )
+      .then((res) => res.text())
+      .then((body) => expect(body).toBe("Async middleware works well"));
+  });
+
+  test("multi middlewares works well", () => {
+    return bootstrap(
+      "/base/multi",
+      `
+      app.use("/base/multi", event => {
+        const testHeader = new Headers();
+        testHeader.append("processor", "first");
+        const newRequest = new Request(event.request.url, {
+          ...event.request,
+          headers: testHeader
+        })
+        event.request = newRequest;
+        return event;
+      })
+      app.use("/base/multi", async event => {
+        const testHeader = event.request.headers.get("processor");
+        if(testHeader === "first") {
+          return new Response("Response body is from processor Second.");
+        } else {
+          return new Response("Response body is Only from processor Second, which is not correct.", {status: 500})
         }
       })
-      app.use('/test2',function(event) {
-        if(event.request.url === "http://127.0.0.1/test2") {
-          return new Response("test", {status: 400});
+    `
+    ).then(async (res) => {
+      const finalRes = await res.text();
+      expect(finalRes).toBe("Response body is from processor Second.");
+    });
+  });
+
+  test("tail process middlewares works well", () => {
+    return bootstrap(
+      "/base/tail-process",
+      `
+      app.use("/base/tail-process", {
+        default: event => {},
+        callback: (event, response) => {
+          response.headers.set("Test-Header", "Success")
+          return response;
         }
       })
-    `).then(res => {
-    expect(res.status).toBe(200);
-  })
+    `
+    ).then((res) => {
+      expect(res.headers.get("Test-Header")).toBe("Success");
+    });
+  });
 });

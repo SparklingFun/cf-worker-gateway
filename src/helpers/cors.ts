@@ -1,8 +1,8 @@
 interface CORSOption {
-  origin?: Boolean | String | RegExp | Array<String | RegExp> | Function;
-  methods?: String | Array<String>;
-  allowedHeaders?: String | Array<String>;
-  exposedHeaders?: String | Array<String>;
+  origin?: boolean | string | RegExp | Array<string | RegExp> | Function;
+  methods?: string | Array<string>;
+  allowedHeaders?: string | Array<string>;
+  exposedHeaders?: string | Array<string>;
   credentials?: boolean;
   maxAge?: string | number;
   preflightContinue?: boolean;
@@ -11,47 +11,47 @@ interface CORSOption {
 
 function isOriginAllowed(
   origin: string,
-  allowedOrigin: Boolean | String | RegExp | Array<String | RegExp> | Function
+  allowedOrigin: boolean | string | RegExp | Array<string | RegExp> | Function
 ) {
   if (Array.isArray(allowedOrigin)) {
-    for (var i = 0; i < allowedOrigin.length; ++i) {
+    for (let i = 0; i < allowedOrigin.length; i += 1) {
       if (isOriginAllowed(origin, allowedOrigin[i])) {
         return true;
       }
     }
     return false;
-  } else if (typeof allowedOrigin === "string") {
-    return origin === allowedOrigin;
-  } else if (allowedOrigin instanceof RegExp) {
-    return allowedOrigin.test(origin);
-  } else {
-    return !!allowedOrigin;
   }
+  if (typeof allowedOrigin === "string") {
+    return origin === allowedOrigin;
+  }
+  if (allowedOrigin instanceof RegExp) {
+    return allowedOrigin.test(origin);
+  }
+  return !!allowedOrigin;
 }
 
 // inject custom header functions for CORS
 function configureOrigin(event: FetchEvent, options: CORSOption) {
-  let requestOrigin = event.request.headers.get("Origin") || "",
-    isAllowed;
+  const requestOrigin = event.request.headers.get("Origin") || "";
 
   if (!options.origin || options.origin === "*") {
     return {
       key: "Access-Control-Allow-Origin",
       value: "*",
     };
-  } else if (typeof options.origin === "string") {
+  }
+  if (typeof options.origin === "string") {
     return {
       key: "Access-Control-Allow-Origin",
       value: options.origin,
     };
-  } else {
-    isAllowed = isOriginAllowed(requestOrigin, options.origin);
-    // reflect origin
-    return {
-      key: "Access-Control-Allow-Origin",
-      value: isAllowed ? requestOrigin : false,
-    };
   }
+  const isAllowed = isOriginAllowed(requestOrigin, options.origin);
+  // reflect origin
+  return {
+    key: "Access-Control-Allow-Origin",
+    value: isAllowed ? requestOrigin : false,
+  };
 }
 function configureMethods(options: CORSOption) {
   if (Array.isArray(options.methods) && options.methods.join) {
@@ -81,7 +81,7 @@ function configureAllowedHeaders(options: CORSOption) {
   };
 }
 function configureMaxAge(options: CORSOption) {
-  var maxAge =
+  const maxAge =
     (typeof options.maxAge === "number" || options.maxAge) &&
     options.maxAge.toString();
   if (maxAge && maxAge.length) {
@@ -114,7 +114,7 @@ const cors = function (
   }
 ) {
   return {
-    default: function (event: FetchEvent) {
+    default(event: FetchEvent) {
       if (typeof options === "object" && options.preflightContinue) return;
       if (event.request.method === "OPTIONS") {
         return new Response(null, {
@@ -124,27 +124,29 @@ const cors = function (
               : 204,
         });
       }
-      return;
     },
-    callback: function (event: FetchEvent, response: Response) {
+    callback(event: FetchEvent, response: Response) {
       if (options === false) return;
-      if (options === true) options = {
-        origin: "*",
-        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-        preflightContinue: false,
-        optionsSuccessStatus: 204,
+      if (options === true) {
+        options = {
+          origin: "*",
+          methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+          preflightContinue: false,
+          optionsSuccessStatus: 204,
+        };
       }
 
-      let headers = [];
+      const headers = [];
       headers.push(configureAllowedHeaders(options));
       headers.push(configureCredentials(options));
       headers.push(configureExposeHeaders(options));
       headers.push(configureMaxAge(options));
       headers.push(configureMethods(options));
       headers.push(configureOrigin(event, options));
-      headers.map(header => {
-        if(typeof header === 'object' && header.key && header.value) response.headers.set(header.key, header.value.toString())
-      })
+      headers.forEach((header) => {
+        if (typeof header === "object" && header.key && header.value)
+          response.headers.set(header.key, header.value.toString());
+      });
 
       return response;
     },

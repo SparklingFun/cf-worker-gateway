@@ -9,7 +9,8 @@ const PASS = "YOUR_PASSWORD";
  * auth-scheme = "Basic" ; case insensitive
  * token68     = 1*( ALPHA / DIGIT / "-" / "." / "_" / "~" / "+" / "/" ) *"="
  */
-const CREDENTIALS_REGEXP = /^ *(?:[Bb][Aa][Ss][Ii][Cc]) +([A-Za-z0-9._~+/-]+=*) *$/;
+const CREDENTIALS_REGEXP =
+  /^ *(?:[Bb][Aa][Ss][Ii][Cc]) +([A-Za-z0-9._~+/-]+=*) *$/;
 /**
  * RegExp for basic auth user/pass
  *
@@ -23,44 +24,43 @@ const USER_PASS_REGEXP = /^([^:]*):(.*)$/;
  * Object to represent user credentials.
  */
 const Credentials = function (this: any, name: string, pass: string): void {
-    this.name = name;
-    this.pass = pass;
-}
-
+  this.name = name;
+  this.pass = pass;
+};
 
 const unauthorizedResponse = function (string: string, realm?: string) {
-    return new Response(string, {
-        status: 401,
-        statusText: "'Authentication required.'",
-        headers: {
-            "WWW-Authenticate": 'Basic' + (realm ? ' realm="'+realm+'"' : "")
-        }
-    })
-}
+  return new Response(string, {
+    status: 401,
+    statusText: "'Authentication required.'",
+    headers: {
+      "WWW-Authenticate": `Basic${realm ? ` realm="${realm}"` : ""}`,
+    },
+  });
+};
 
 const parseAuthHeader = function (string: string | null) {
-    if (typeof string !== 'string') {
-        return false;
-    }
-    // parse header
-    const match = CREDENTIALS_REGEXP.exec(string);
-    if (!match) {
-        return false;
-    }
-    // decode user pass
-    const userPass = USER_PASS_REGEXP.exec(atob(match[1]));
-    if (!userPass) {
-        return false;
-    }
+  if (typeof string !== "string") {
+    return false;
+  }
+  // parse header
+  const match = CREDENTIALS_REGEXP.exec(string);
+  if (!match) {
+    return false;
+  }
+  // decode user pass
+  const userPass = USER_PASS_REGEXP.exec(atob(match[1]));
+  if (!userPass) {
+    return false;
+  }
 
-    // return credentials object
-    return new (Credentials as any)(userPass[1], userPass[2]);
-}
+  // return credentials object
+  return new (Credentials as any)(userPass[1], userPass[2]);
+};
 
 interface basicAuthOption {
-    USER_NAME?: string
-    USER_PASS?: string
-    realm?: string
+  USER_NAME?: string;
+  USER_PASS?: string;
+  realm?: string;
 }
 
 /**
@@ -70,18 +70,22 @@ interface basicAuthOption {
  * @returns Middleware handler
  */
 export default function basicAuth(options: basicAuthOption) {
-    if(!options) options = {};
-    const USER_NAME = options.USER_NAME || NAME;
-    const USER_PASS = options.USER_PASS || PASS;
-    return function (event: FetchEvent) {
-        const credentials = parseAuthHeader(event.request.headers.get("Authorization"));
-        if (credentials === undefined) {
-            return unauthorizedResponse("Unauthorized", options.realm);
-        }
-        if (!credentials || credentials.name !== USER_NAME || credentials.pass !== USER_PASS) {
-            return unauthorizedResponse("Unauthorized", options.realm)
-        } else {
-            return;
-        }
+  if (!options) options = {};
+  const USER_NAME = options.USER_NAME || NAME;
+  const USER_PASS = options.USER_PASS || PASS;
+  return function (event: FetchEvent) {
+    const credentials = parseAuthHeader(
+      event.request.headers.get("Authorization")
+    );
+    if (credentials === undefined) {
+      return unauthorizedResponse("Unauthorized", options.realm);
     }
+    if (
+      !credentials ||
+      credentials.name !== USER_NAME ||
+      credentials.pass !== USER_PASS
+    ) {
+      return unauthorizedResponse("Unauthorized", options.realm);
+    }
+  };
 }

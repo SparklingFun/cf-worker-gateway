@@ -54,20 +54,22 @@ A simple guide for creating a new middleware:
 
 ```javascript
 // your custom middleware
-function customizedMiddleware(option) { // if you need pass some options, a wrapper is needed.
-    return async function(event) { // all middleware apply to 1 parameters, event;
-        // const someRule = ...
-        // const otherRule = ...
-        if(someRule) {
-            return new Response(); // you can directly return a response when matched
-        } else if(otherRule) {
-            let modifiedEvent = new Event('fetch');
-            return modifiedEvent; // modify event, and pass to next, this modification will not lose
-        } else {
-            // all rules are not match, please call next() without any param
-            return;
-        }
+function customizedMiddleware(option) {
+  // if you need pass some options, a wrapper is needed.
+  return async function (event) {
+    // all middleware apply to 1 parameters, event;
+    // const someRule = ...
+    // const otherRule = ...
+    if (someRule) {
+      return new Response(); // you can directly return a response when matched
+    } else if (otherRule) {
+      let modifiedEvent = new Event("fetch");
+      return modifiedEvent; // modify event, and pass to next, this modification will not lose
+    } else {
+      // all rules are not match, please call next() without any param
+      return;
     }
+  };
 }
 ```
 
@@ -82,16 +84,18 @@ Full option,
 ```javascript
 import redirect from "cf-worker-gateway/middlewares/redirect";
 
-app.use(redirect({
+app.use(
+  redirect({
     basePath: "",
     rules: [
-        {
-            source: "event request path",
-            destination: "redirected url or path",
-            permanent: true // HTTP Code 308 or 307
-        }
-    ]
-}))
+      {
+        source: "event request path",
+        destination: "redirected url or path",
+        permanent: true, // HTTP Code 308 or 307
+      },
+    ],
+  })
+);
 ```
 
 A `Response.redirect` will return when matched.
@@ -103,15 +107,17 @@ Full option,
 ```javascript
 import rewrite from "cf-worker-gateway/middlewares/rewrite";
 
-app.use(rewrite({
+app.use(
+  rewrite({
     basePath: "",
     rules: [
-        {
-            source: "event request url or path",
-            destination: "redirected url or path"
-        }
-    ]
-}))
+      {
+        source: "event request url or path",
+        destination: "redirected url or path",
+      },
+    ],
+  })
+);
 ```
 
 ### helpers
@@ -125,7 +131,7 @@ Example is so simple,
 ```javascript
 import allowOption from "cf-worker-gateway/helpers/allowOption";
 
-app.use(allowOption())
+app.use(allowOption());
 ```
 
 #### robotsTxt
@@ -135,19 +141,21 @@ It's a middleware that receive all request ends with `robots.txt`, you can confi
 ```javascript
 import robotsTxt from "cf-worker-gateway/helpers/robotsTxt";
 
-app.use(robotsTxt({
+app.use(
+  robotsTxt({
     rules: [
-        {
-            userAgent: "GoogleBot",
-            allow: ["/"]
-        },
-        {
-            userAgent: "Bingbot",
-            disallow: ["/google-only"]
-        }
+      {
+        userAgent: "GoogleBot",
+        allow: ["/"],
+      },
+      {
+        userAgent: "Bingbot",
+        disallow: ["/google-only"],
+      },
     ],
-    sitemapUrl: ["https://localhost/sitemap.xml"]
-}))
+    sitemapUrl: ["https://localhost/sitemap.xml"],
+  })
+);
 ```
 
 #### ipController
@@ -159,10 +167,12 @@ Code example,
 ```javascript
 import ipController from "cf-worker-gateway/helpers/ipController";
 
-app.use(ipController({
-    deny: ['127.0.0.1'],
-    allow: ['10.1.1.0/24']
-}))
+app.use(
+  ipController({
+    deny: ["127.0.0.1"],
+    allow: ["10.1.1.0/24"],
+  })
+);
 ```
 
 #### accessRateLimit
@@ -172,16 +182,18 @@ An easy way to block Crazy Spiders or Malicious requests, you need a Worker KV a
 ```javascript
 import accessRateLimit from "cf-worker-gateway/helpers/accessRateLimit";
 
-app.use(accessRateLimit({
+app.use(
+  accessRateLimit({
     rules: [
-        {
-            path: "/api/test",
-            times: 1,
-            banTime: 1000
-        }
+      {
+        path: "/api/test",
+        times: 1,
+        banTime: 1000,
+      },
     ],
-    jailKVSpace: KeyValueStore
-}))
+    jailKVSpace: KeyValueStore,
+  })
+);
 ```
 
 #### basicAuth
@@ -193,16 +205,18 @@ For example,
 ```javascript
 import basicAuth from "cf-worker-gateway/helpers/basicAuth";
 
-app.use(basicAuth({
+app.use(
+  basicAuth({
     path: "/admin", // You can also use an array, like `["/admin", "/admin/**"]` to specify multi path.
     USER_NAME: "YOUR_USER_NAME",
-    USER_PASS: "YOUR_PASSWORD"
-}))
+    USER_PASS: "YOUR_PASSWORD",
+  })
+);
 ```
 
 ### deprecated
 
-> __Warning: These middlewares may effect your worker performance, obviously in async middleware mode, please use CAREFULLY.__
+> **Warning: These middlewares may effect your worker performance, obviously in async middleware mode, please use CAREFULLY.**
 
 #### faviconByBase64
 
