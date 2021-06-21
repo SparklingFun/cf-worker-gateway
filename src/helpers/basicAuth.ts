@@ -23,9 +23,9 @@ const USER_PASS_REGEXP = /^([^:]*):(.*)$/;
 /**
  * Object to represent user credentials.
  */
-const Credentials = function (this: any, name: string, pass: string): void {
-  this.name = name;
-  this.pass = pass;
+const Credentials = function (_this: any, name: string, pass: string): void {
+  _this.name = name;
+  _this.pass = pass;
 };
 
 const unauthorizedResponse = function (string: string, realm?: string) {

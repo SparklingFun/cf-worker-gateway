@@ -24,16 +24,22 @@ const { match } = PathToRegexp;
 class WorkerScaffold {
   // internal members;
   private event: FetchEvent;
+
   private isDev: boolean = false;
+
   private fns: Array<Function | Promise<Function> | MiddlewareHandlerBundle> =
     [];
+
   private matched: Match = false;
+
   constructor(event: FetchEvent, isDev?: boolean) {
     this.event = event;
     this.isDev = isDev || false;
   }
+
   // public configurations
-  public errorHandler(_error: Error) {}
+  static errorHandler(_error: Error) {}
+
   // public members
   public use(
     path: string | undefined,
@@ -65,6 +71,7 @@ class WorkerScaffold {
       this.fns.push(handler);
     }
   }
+
   /**
    * A bundle of alias functions of `app.use`
    * @returns app.use function
@@ -76,6 +83,7 @@ class WorkerScaffold {
     if (this.event.request.method.toLowerCase() !== "get") return;
     return this.use(path, handler);
   }
+
   post(
     path: string | undefined,
     handler?: Function | MiddlewareHandlerBundle
@@ -83,6 +91,7 @@ class WorkerScaffold {
     if (this.event.request.method.toLowerCase() !== "post") return;
     return this.use(path, handler);
   }
+
   head(
     path: string | undefined,
     handler?: Function | MiddlewareHandlerBundle
@@ -90,6 +99,7 @@ class WorkerScaffold {
     if (this.event.request.method.toLowerCase() !== "head") return;
     return this.use(path, handler);
   }
+
   put(
     path: string | undefined,
     handler?: Function | MiddlewareHandlerBundle
@@ -97,6 +107,7 @@ class WorkerScaffold {
     if (this.event.request.method.toLowerCase() !== "put") return;
     return this.use(path, handler);
   }
+
   delete(
     path: string | undefined,
     handler?: Function | MiddlewareHandlerBundle
@@ -104,6 +115,7 @@ class WorkerScaffold {
     if (this.event.request.method.toLowerCase() !== "delete") return;
     return this.use(path, handler);
   }
+
   options(
     path: string | undefined,
     handler?: Function | MiddlewareHandlerBundle
@@ -111,6 +123,7 @@ class WorkerScaffold {
     if (this.event.request.method.toLowerCase() !== "options") return;
     return this.use(path, handler);
   }
+
   /**
    * Generate response for `event.respondWith`
    * @returns Expected response which is generated through multiple middlewares
@@ -139,9 +152,10 @@ class WorkerScaffold {
       if (!respond || !(respond instanceof Response))
         respond = new Response(null, { status: 404 });
       for (let i = 0; i < this.fns.length; i += 1) {
-        // @ts-ignore
         if (
+          // @ts-ignore
           this.fns[i].callback &&
+          // @ts-ignore
           typeof this.fns[i].callback === "function"
         ) {
           // @ts-ignore
@@ -151,8 +165,11 @@ class WorkerScaffold {
       /* eslint-enable no-await-in-loop */
       return respond;
     } catch (e) {
-      if (this.errorHandler && typeof this.errorHandler === "function") {
-        this.errorHandler(e);
+      if (
+        WorkerScaffold.errorHandler &&
+        typeof WorkerScaffold.errorHandler === "function"
+      ) {
+        WorkerScaffold.errorHandler(e);
       }
       if (this.isDev) {
         return new Response(`Worker Error: ${e.message}`, {

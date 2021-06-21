@@ -40,5 +40,6 @@ module.exports = {
     "operator-linebreak": "off",
     // Not adjustable config
     "import/prefer-default-export": "off",
+    "no-unused-vars": ["error", { args: "all", argsIgnorePattern: "^_" }],
   },
 };
