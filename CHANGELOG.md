@@ -1,3 +1,5 @@
+## [1.0.4](https://github.com/arctome/worker-scaffold/compare/v1.0.3...v1.0.4) (2021-06-21)
+
 ## [1.0.3](https://github.com/arctome/worker-scaffold/compare/v1.0.2...v1.0.3) (2021-06-15)
 
 ### Bug Fixes
