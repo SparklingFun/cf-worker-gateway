@@ -1,3 +1,10 @@
+## [1.0.5-canary.1](https://github.com/arctome/worker-scaffold/compare/v1.0.5-canary.0...v1.0.5-canary.1) (2021-06-21)
+
+### Features
+
+- **extension:** allow `errorHandler` return custom response ([0a6466f](https://github.com/arctome/worker-scaffold/commit/0a6466f35e895dadd82742acca16787772d946a8))
+- **lint:** lint for previous commit ([8837e35](https://github.com/arctome/worker-scaffold/commit/8837e356bd30008178d0651257fb9c1c2cd3e974))
+
 ## [1.0.5-canary.0](https://github.com/arctome/worker-scaffold/compare/v1.0.4...v1.0.5-canary.0) (2021-06-21)
 
 ## [1.0.4](https://github.com/arctome/worker-scaffold/compare/v1.0.3...v1.0.4) (2021-06-21)
